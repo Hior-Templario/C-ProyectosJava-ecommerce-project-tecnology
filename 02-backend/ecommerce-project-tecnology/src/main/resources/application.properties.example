@@ -1,0 +1,10 @@
+# Base de datos
+spring.datasource.url=jdbc:mysql://localhost:3306/mi_base
+spring.datasource.username=mi_usuario
+spring.datasource.password=mi_contraseña
+
+# AWS S3
+aws.accessKey=TU_ACCESS_KEY
+aws.secretKey=TU_SECRET_KEY
+aws.region=us-east-2
+aws.bucketName=mi-bucket
