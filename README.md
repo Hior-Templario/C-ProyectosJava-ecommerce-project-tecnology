@@ -16,9 +16,12 @@ Sistema completo de ecommerce modular, compuesto por una API REST en Spring Boot
 - 🖼 Subida y eliminación de imágenes a Amazon S3.
 - 🔗 Asociación de imágenes según tipo de entidad (`TipoEntidad`).
 - ⚠️ Manejo de errores con `ResponseStatusException`.
+- 🔐 Autenticación y autorización con JWT + Spring Security.
+- 📦 Uso de DTOs + MapStruct.
 - 🧱 Backend con arquitectura por capas (`Controller`, `Service`, `Repository`).
 - 🗄 Script SQL de base de datos incluido.
 - 🖥️ Frontend desacoplado en Angular.
+
 
 ---
 
@@ -107,8 +110,6 @@ Los scripts `.sql` están en la carpeta `database/`. Puedes importarlos desde **
 
 ## 🔜 Próximas mejoras
 
-- 🔐 Autenticación y autorización con JWT + Spring Security.
-- 📦 Uso de DTOs + MapStruct.
 - 🧪 Pruebas unitarias con JUnit + Mockito.
 - 🧾 Documentación Swagger.
 - 🐳 Dockerizar backend y frontend.
