@@ -1,0 +1,40 @@
+<div *ngIf="producto" class="detalles-container">
+
+  <h2 class="detalles-titulo">
+    <strong> {{ producto.nombreProducto }}</strong>
+  </h2>
+
+  <div class="detalles-header">
+
+    <img class="detalles-imagen" *ngIf="producto.imagenesProducto && producto.imagenesProducto.length > 0"
+      [src]="producto.imagenesProducto[0].urlImagen" alt="Imagen del producto">
+
+    <div class="detalles-principales">
+      <p><strong>Descripcion: </strong>{{ producto.descripcion }}</p>
+      <p><strong>Precio: </strong>{{ producto.precio }}</p>
+    </div>
+
+  </div>
+
+  <div *ngIf="producto" class="detalles-especificos">
+    <h3>Datos Producto</h3>
+    
+      
+      <p><strong>Codigo producto:</strong> {{ producto.codigoProducto }}</p>
+      <p><strong>Fecha de registro:</strong> {{ producto.fechaRegistro }}</p>
+      <p><strong>Fecha de actualizacion:</strong> {{ producto.fechaActualizacion }}</p>
+
+      <p><strong>Categoria:</strong> {{ producto.categoria.nombreCategoria }}</p>
+      <img class="detalles-imagen" *ngIf="producto.categoria.imagenesCategoria && producto.categoria.imagenesCategoria.length > 0"
+      [src]="producto.categoria.imagenesCategoria[0].urlImagen" alt="Imagen del la categioria">
+
+      <p><strong>Marca</strong> {{ producto.marca.nombreMarca}}</p>
+      <img class="detalles-imagen" *ngIf="producto.marca.imagenesMarca && producto.marca.imagenesMarca.length > 0"
+      [src]="producto.marca.imagenesMarca[0].urlImagen" alt="Imagen de la marca">
+
+  </div>
+
+</div>
+<div *ngIf="!producto">
+  <p>Cargando producto..</p>
+</div>

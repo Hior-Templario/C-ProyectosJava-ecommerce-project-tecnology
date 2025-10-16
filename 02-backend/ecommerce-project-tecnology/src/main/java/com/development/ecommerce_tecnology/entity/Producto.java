@@ -1,9 +1,11 @@
 package com.development.ecommerce_tecnology.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "producto")
@@ -13,29 +15,37 @@ public class Producto {
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private Long idProducto;
 
-    @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
+    @Column(name = "codigo_producto", nullable = false, length = 40)
+    private String codigoProducto;
+
+    @Column(name = "nombre_producto", nullable = false, length = 100)
+    private String nombreProducto;
 
     @Column(name = "descripcion", nullable = false, length = 5000)
     private String descripcion;
 
+    @Transient // Importante, esto indica que no se mapea directamente en la tabla
+    private List<Imagen> imagenes;
+
     @Column(name = "precio", nullable = false)
     private Double precio;
 
-    @Column(name = "stock", nullable = false, length = 100)
-    private int stock;
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
 
     @Column(name = "fecha_registro")
-    private Date fechaRegistro;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaRegistro;
 
     @Column(name = "fecha_actualizacion")
-    private Date fechaActualizacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaActualizacion;
 
     @ManyToOne
     @JoinColumn(name ="id_categoria", nullable = false)
     private Categoria categoria;
 
-   // @NotNull(message = " La maca es oligatoria")
+   // @NotNull(message = " La marca es oligatoria")
     @ManyToOne()
     @JoinColumn(name ="id_marca", nullable = false)
     private Marca marca;
@@ -48,12 +58,20 @@ public class Producto {
         this.idProducto = idProducto;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getCodigoProducto() {
+        return codigoProducto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public String getDescripcion() {
@@ -64,6 +82,14 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
+    public List<Imagen> getImagenes() {
+        return imagenes;
+    }
+
+    public void setImagenes(List<Imagen> imagenes) {
+        this.imagenes = imagenes;
+    }
+
     public Double getPrecio() {
         return precio;
     }
@@ -72,27 +98,27 @@ public class Producto {
         this.precio = precio;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public Date getFechaRegistro() {
+    public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(Date fechaRegistro) {
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public Date getFechaActualizacion() {
+    public LocalDateTime getFechaActualizacion() {
         return fechaActualizacion;
     }
 
-    public void setFechaActualizacion(Date fechaActualizacion) {
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
 
@@ -110,5 +136,16 @@ public class Producto {
 
     public void setMarca(Marca marca) {
         this.marca = marca;
+    }
+
+    @PrePersist
+    protected void ocCreate(){
+        this.fechaRegistro = LocalDateTime.now();
+        this.fechaActualizacion = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.fechaActualizacion = LocalDateTime.now();
     }
 }

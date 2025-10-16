@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary btn-fijo"> Crear nueva Categoria
+</button>
+
+</div>
+
+<div class="contenedor">
+  <div *ngFor="let categoria of categorias" class="categoria-item">
+    <div *ngIf="categoria.imagenesCategoria">
+      
+      <img *ngFor="let imagen of categoria.imagenesCategoria" 
+      [src]="imagen.urlImagen" 
+      [alt]="categoria.nombreCategoria"
+      class="imagen-categoria">  
+    </div>
+    <div class="botones-accion">
+      <button class="btn btn-primary btn-fijo" >Ver productos</button>
+      <button class="btn btn-warning btn-fijo" >Editar Cátegoria</button>
+      <button class="btn btn-danger btn-fijo" >Eliminar Cátegoria</button>
+    </div>
+</div>
+

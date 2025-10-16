@@ -16,9 +16,23 @@ public class Categoria {
     @Column(name = "nombre_categoria")
     private String nombreCategoria;
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
+    @Column(name = "prefijo_categoria")
+    private String prefijoCategoria;
+
     @Transient // Importante, esto indica que no se mapea directamente en la tabla
     private List<Imagen> imagenes;
 
+
+    public Long getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(Long idCategoria) {
+        this.idCategoria = idCategoria;
+    }
 
     public String getNombreCategoria() {
         return nombreCategoria;
@@ -28,8 +42,19 @@ public class Categoria {
         this.nombreCategoria = nombreCategoria;
     }
 
-    public Long getIdCategoria() {
-        return idCategoria;
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getPrefijoCategoria() {
+        return prefijoCategoria;
+    }
+
+    public void setPrefijoCategoria(String prefijoCategoria) {
+        this.prefijoCategoria = prefijoCategoria;
     }
 
     public List<Imagen> getImagenes() {
@@ -40,11 +65,5 @@ public class Categoria {
         this.imagenes = imagenes;
     }
 
-    public void setIdCategoria(Long idCategoria) {
-        this.idCategoria = idCategoria;
-
-
-
-    }
 
 }

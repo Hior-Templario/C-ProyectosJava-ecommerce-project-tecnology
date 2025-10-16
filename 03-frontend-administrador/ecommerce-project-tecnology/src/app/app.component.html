@@ -1,0 +1,88 @@
+<!--header-->
+<nav class="header-menu text-white p-3">
+
+  <h1>
+    <img src="assets/images/logo.png" class="img-fluid" alt="TecnoMundo" width="10%">
+    SISTEMA ADMINISTRATIVO
+  </h1>
+
+  <div class="sesion">
+    <button *ngIf="!autenticacionService.isLoggedIn()" routerLink="/login"
+      class="btn btn-primary btn-fijo-sesion">INGRESAR</button>
+
+    <button *ngIf="autenticacionService.isLoggedIn() && idUsuario" [routerLink]="['/perfilUsuario', idUsuario]"
+      class="btn btn-primary btn-fijo-sesion">PERFIL</button>
+
+    <button *ngIf="autenticacionService.isLoggedIn()" (click)="logout()" class="btn btn-danger btn-fijo-sesion">CERRAR
+      SESIÓN</button>
+
+  </div>
+</nav>
+
+
+<div class="contenedor  ">
+
+  <!--Menu lateral-->
+
+  <aside class="aside-menu text-white p-3">
+
+    <ul class="nav flex-column">
+
+      <li>
+        <span class="menu-title"> CATALOGO / PRODUCTOS</span>
+        <ul class="submenu">
+          <li><a class="no-underline" routerLink="crearCategoria" routerLinkActive="active-link">CREAR CATEGORIAS</a>
+          <li><a class="no-underline" routerLink="agregarProducto" routerLinkActive="active-link">CREAR PRODUCTOS</a>
+          </li>
+          <li><a class="no-underline" routerLink="crearMarca" routerLinkActive="active-link">CREAR MARCA</a></li>
+          <li><a class="no-underline" routerLink="listaProductos" routerLinkActive="active-link">LISTADO PRODUCTOS</a>
+          </li>
+
+        </ul>
+      </li>
+
+
+      <li>
+        <span class="menu-title"> CLIENTES</span>
+        <ul class="submenu">
+          <li><a class="no-underline" routerLink="prueba" routerLinkActive="active-link">CLIENTES</a></li>
+
+        </ul>
+      </li>
+
+
+      <li>
+        <span class="menu-title"> INVENTARIO</span>
+        <ul class="submenu">
+          <li><a class="no-underline" routerLink="registrarMovimiento" routerLinkActive="active-link">INGRESAR STOCK</a></li>
+          <li><a class="no-underline" routerLink="registrarMovimiento" routerLinkActive="active-link">AJUSTAR STOCK</a></li>
+          <li><a class="no-underline" routerLink="listarInventario" routerLinkActive="active-link">VER INVENTARIO</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <span class="menu-title"> USUARIOS</span>
+        <ul class="submenu">
+          <li><a class="no-underline" routerLink="listaUsuarios" routerLinkActive="active-link">USUARIOS REGISTRADOS</a>
+          </li>
+          <li><a class="no-underline" routerLink="crearUsuarios" routerLinkActive="active-link">CREAR USUARIO</a></li>
+
+        </ul>
+
+      </li>
+
+    </ul>
+
+  </aside>
+
+  <!-- Contenido principal-->
+
+  <section class="body">
+
+    <router-outlet></router-outlet>
+
+  </section>
+
+
+
+</div>

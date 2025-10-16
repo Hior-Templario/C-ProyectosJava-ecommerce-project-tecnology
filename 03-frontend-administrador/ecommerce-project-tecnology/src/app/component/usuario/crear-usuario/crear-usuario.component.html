@@ -1,0 +1,211 @@
+<form [formGroup]="formUsuarioPersona" (ngSubmit)="onSubmit()" class="formulario">
+
+
+    <fieldset class="form-fieldset">
+
+        <legend class="form-legend">  Registrar usuario</legend>
+
+        <!-- ID Producto (oculto solo para edicions)-->
+
+
+        <div class="row">
+
+            <!-- Nombre Producto -->
+
+            <div class="formulario-col">
+                <label for="nombreUsuario">Nombre de usuario</label>
+                <input id="nombreUsuario" class="form-control" formControlName="nombreUsuario" type="text"
+                    placeholder="Ingrese nombre usuario">
+            </div>
+
+            <!-- correo -->
+            <div class="formulario-col">
+                <label for="correo">Correo electrónico</label>
+                <input id="correo" class="form-control" formControlName="correo" type="email"
+                    placeholder="Ingrese Correo electrónico">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- contraseña -->
+            <div class="formulario-col">
+                <label for="contrasenia">Contraseña</label>
+                <input id="contrasenia" class="form-control" formControlName="contrasenia" type="password"
+                    placeholder="Ingrese nueva contraseña">
+            </div>
+
+        </div>
+
+        <div class="row">
+            <!-- Campo foto de perfil -->
+             <div class="formulario-col">
+                <label for="archivo"> Foto de perfil</label>
+                 <input id="archivo" type="file" class="form-control"
+                (change)="onFileSelected($event)" accept="image/*">
+             </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Fechas ocultas -->
+            <input type="hidden" formControlName="fechaRegistro">
+
+        </div>
+        <div class="row">
+            <!-- Rol -->
+            <div class="formulario-col">
+                <label for="idRol">Rol</label>
+                <select id="idRol" class="form-select" formControlName="idRol">
+                    <option value=""> seleccione un rol</option>
+                    <option *ngFor="let rol of roles" [value]="rol.idRol">{{rol.nombreRol}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Marca -->
+            <div class="formulario-col">
+                <label for="idEstado">Estado del usuario</label>
+                <select id="idEstado" class="form-select" formControlName="idEstado">
+                    <option value=""> seleccione una estado</option>
+                    <option *ngFor="let est of estados" [value]="est.idEstado">{{est.nombreEstado}}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+
+    </fieldset>
+
+
+    <fieldset class="form-fieldset mt-3">
+
+        <legend class="form-legend"> Datos personales</legend>
+        <!-- DATOS PERSONALES -->
+
+
+
+
+        <div class="row">
+
+            <!-- Nombre persona -->
+
+            <div class="formulario-col">
+                <label for="nombresPersona">Nombres</label>
+                <input id="nombresPersona" class="form-control" formControlName="nombresPersona" type="text"
+                    placeholder="Ingrese nombres del usuario">
+            </div>
+
+            <!-- Apellidos Persona -->
+            <div class="formulario-col">
+                <label for="apellidosPersona">Apellidos</label>
+                <input id="apellidosPersona" class="form-control" formControlName="apellidosPersona" type="text"
+                    placeholder="Ingrese apellidos del usuario">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- Tipo Documento -->
+            <div class="formulario-col">
+                <label for="tipoDocumento">Tipo de documento</label>
+                <select id="tipoDocumento" class="form-control" formControlName="tipoDocumento">
+                    <option value="">Seleccione ...</option>
+                    <option value="CC">CC-Cédula de Ciudadanía</option>
+                    <option value="CE">CE - Cédula de Extranjería</option>
+                    <option value="TI">TI - Tarjeta de Identidad </option>
+                    <option value="PA">PA - Pasaporte</option>
+
+                </select>
+            </div>
+
+            <!-- Numero Documento -->
+            <div class="formulario-col">
+                <label for="numeroDocumento">Numero de documento</label>
+                <input id="numeroDocumento" class="form-control" formControlName="numeroDocumento" type="text"
+                    placeholder="Ingrese numero documento">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- fechaNacimiento -->
+            <div class="formulario-col">
+                <label for="fechaNacimiento">Fecha de nacimiento</label>
+                <input id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento" type="date"
+                    placeholder=" Ingrese fecha de nacimiento">
+            </div>
+
+            <!-- Genero -->
+            <div class="formulario-col">
+                <label for="sexo">Genero</label>
+                <select id="sexo" class="form-control" formControlName="sexo">
+                    <option value="">Seleccione ...</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- Telefono -->
+            <div class="formulario-col">
+                <label for="telefono">Telefono</label>
+                <input id="telefono" class="form-control" formControlName="telefono" type="tel"
+                    placeholder=" Ingrese numero de telefono">
+            </div>
+
+
+            <!-- Correo Secundario -->
+            <div class="formulario-col">
+                <label for="correoSecundario">Correo secundario</label>
+                <input id="correoSecundario" class="form-control" formControlName="correoSecundario" type="text"
+                    placeholder="Ingrese correo secundario">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+
+            <!-- Direccion -->
+            <div class="formulario-col">
+                <label for="direccion">Direccion</label>
+                <input id="direccion" class="form-control" formControlName="direccion" type="text"
+                    placeholder="Ingrese direccion">
+            </div>
+
+            <!-- ciudad -->
+            <div class="formulario-col">
+                <label for="ciudad">Ciudad</label>
+                <input id="ciudad" class="form-control" formControlName="ciudad" type="text"
+                    placeholder="Ingrese ciudad">
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            <!-- pais -->
+            <div class="formulario-col">
+                <label for="pais">pais</label>
+                <input id="pais" class="form-control" formControlName="pais" type="text" placeholder="Ingrese pais">
+            </div>
+
+        </div>
+
+        <!-- Botón -->
+
+        <div class="d-grid mt-3">
+            <button class="btn btn-primary btn-guardar" type="submit"> GUARDAR USUARIO</button>
+        </div>
+
+    </fieldset>
+
+</form>

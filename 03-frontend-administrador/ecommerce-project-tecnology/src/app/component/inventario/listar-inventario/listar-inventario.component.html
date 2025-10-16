@@ -1,0 +1,58 @@
+<div class="tabla-encabezado">
+    <h2>INVENTARIO DE PRODUCTOS EN ALMACEN</h2>
+    <button class="btn btn-primary btn-fijo btn-crear" routerLink="/agregarProducto"
+        routerLinkActive="active-link">Agregar producto
+    </button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Imagen</th>
+            <th>Producto</th>
+            <th>Descripcion</th>
+            <th>Categoria</th>
+            <th>Marca</th>
+            <th>Precio</th>
+            <th>Fecha Registro</th>
+            <th>STOCK</th>
+            <th>Acciones</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let producto of productos">
+            <td>{{producto.codigoProducto}}</td>
+
+            <td>
+                <img *ngIf="producto.imagenesProducto && producto.imagenesProducto.length > 0 "
+                    [src]="producto.imagenesProducto[0].urlImagen" alt="Imagen producto" class="listado-img">
+            </td>
+            <td>{{producto.nombreProducto}}</td>
+            <td>{{producto.descripcion}}</td>
+            <td>{{producto.categoria.nombreCategoria}}</td>
+            <td>{{producto.marca.nombreMarca}}</td>
+            <td>{{producto.precio | currency:'COP ': 'symbol':'1.0-0'}}</td>
+            <td>{{producto.fechaRegistro}}</td>
+            <td>{{producto.stock}}</td>
+            <td>
+                <div class="botones-accion">
+                    <button class="btn btn-primary btn-fijo" [routerLink]="['/detallesProducto', producto.idProducto]">
+                        Visualizar</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="paginacion botones-accion">
+    <button class="btn btn-primary btn-fijo" (click)="cambiarPagina(paginaActual -1)"
+        [disabled]="paginaActual ===0">Anterior</button>
+    <span>Pàgina {{ paginaActual +1 }} de {{ totalPaginas }}</span>
+    <button class="btn btn-primary btn-fijo" (click)="cambiarPagina(paginaActual +1)"
+        [disabled]="paginaActual + 1 >= totalPaginas">Siguiente Pagina</button>
+</div>
+
+

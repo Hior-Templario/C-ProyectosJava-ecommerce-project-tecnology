@@ -3,7 +3,6 @@ package com.development.ecommerce_tecnology.entity;
 import com.development.ecommerce_tecnology.enums.TipoEntidad;
 import jakarta.persistence.*;
 
-import java.util.List;
 
 @Entity
 @Table(name ="imagen")

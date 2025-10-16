@@ -16,6 +16,7 @@ public interface ImagenRepository extends JpaRepository<Imagen, Long> {
     // --- Métodos de busqueda ---
     List<Imagen> findByTipoAndIdEntidad(TipoEntidad tipo, Long idEntidad);
     List<Imagen> findByTipoAndIdEntidadIn(TipoEntidad tipo, List<Long> idEntidad);
+    Imagen findFirstByTipoAndIdEntidad(TipoEntidad tipo, Long idEntidad);
     List<Imagen> findByIdEntidad(Long idEntidad);
 
     // --- Métodos de eliminación ---

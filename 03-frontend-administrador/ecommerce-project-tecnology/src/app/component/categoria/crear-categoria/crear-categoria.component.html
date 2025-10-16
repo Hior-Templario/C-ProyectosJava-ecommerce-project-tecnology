@@ -1,0 +1,57 @@
+<form [formGroup]="formCategoria" (ngSubmit)="onSubmit()" class="formulario">
+
+
+    <fieldset class="form-fieldset">
+
+        <legend class="form-legend"> CREAR CATEGORIA</legend>
+
+        <!-- ID Producto (oculto solo para edicions)-->
+
+
+        <div class="row">
+
+            <!-- Nombre Producto -->
+
+            <div class="formulario-col">
+                <label for="nombreCategoria">Nombre de categoria</label>
+                <input id="nombreCategoria" class="form-control" formControlName="nombreCategoria" type="text"
+                    placeholder="Ingrese nombre de categoria">
+            </div>
+
+            <!-- Descripcion -->
+            <div class="formulario-col">
+                <label for="descripcion">Descripcion</label>
+                <input id="descripcion" class="form-control" formControlName="descripcion" type="text"
+                    placeholder="Ingrese descripcion de la categoria">
+            </div>
+
+            <!-- PrefijoCategoria -->
+            <div class="formulario-col">
+                <label for="prefijoCategoria">Prefijo Categoria</label>
+                <input id="prefijoCategoria" class="form-control" formControlName="prefijoCategoria" type="text"
+                    placeholder="Ingrese prefijo de la categoria">
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <!-- Campo foto de categoria -->
+             <div class="formulario-col">
+                <label for="archivo"> Imagen categoria</label>
+                 <input id="archivo" type="file" class="form-control"
+                (change)="onFileSelect($event)" accept="image/*">
+             </div>
+        </div>
+
+
+
+        <!-- Botón -->
+
+        <div class="d-grid mt-3">
+            <button class="btn btn-primary btn-guardar" type="submit">GUARDAR CATEGORIA</button>
+        </div>
+
+    </fieldset>
+
+</form>

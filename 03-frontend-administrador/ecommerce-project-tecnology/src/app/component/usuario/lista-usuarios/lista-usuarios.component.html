@@ -1,0 +1,57 @@
+
+
+<div class="tabla-encabezado">
+    <h2>LISTADO DE USUARIO</h2>
+    <button class="btn btn-primary btn-fijo btn-crear"
+            routerLink="/crearUsuarios" 
+            routerLinkActive="active-link" >Crear nuevo usuario
+    </button>
+</div>
+
+<table class="filtros">
+
+    <thead>
+
+        <th>Usuario</th>
+        <th>Nombre Completo</th>
+        <th>Correo</th>
+        <th>Fecha Registro</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>imagen</th>
+        <th>Acciones</th>
+
+    </thead>
+
+    <tbody>
+
+        <tr *ngFor="let usuario of usuarios" [routerLink]="['/perfilUsuario', usuario.idUsuario]">
+
+            <td>{{usuario.nombreUsuario}}</td>
+            <td>{{usuario.persona.nombresPersona}} " "{{usuario.persona.apellidosPersona}}</td>
+            <td>{{usuario.correo}}</td>
+            <td>{{usuario.fechaRegistro}}</td>
+            <td>{{usuario.rol.nombreRol}}</td>
+            <td>{{usuario.estadoUsuario.nombreEstado}}</td>
+            <td>
+                <a [routerLink]="['/perfilUsuario', usuario.idUsuario]"> 
+                    <img [src]="usuario.imagenUsuario?.urlImagen || 'assets/images/default-user.png'" 
+                    class="usuario-img"
+                    alt="usuario">
+
+                </a>
+            </td>
+            <td>
+                
+                    <button class="btn btn-primary btn-fijo" >
+                            Visualizar</button>
+                    <button class="btn btn-danger btn-fijo">Eliminar</button>
+                
+            </td>
+
+
+        </tr>
+
+    </tbody>
+
+</table>

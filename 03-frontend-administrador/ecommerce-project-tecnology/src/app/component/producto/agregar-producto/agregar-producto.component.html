@@ -1,0 +1,74 @@
+<form [formGroup]="formProducto" (ngSubmit)="onSubmit()" class="formulario">
+
+    <fieldset class="form-fieldset">
+    
+        <legend class="form-legend"> CREAR PRODUCTO</legend>
+
+
+    <!-- Nombre Producto -->  
+
+    <div>
+        <label for="nombreProducto">nombre producto</label>
+        <input id="nombreProducto" class="form-control" formControlName="nombreProducto" type="text" placeholder="Ingrese nombre">
+    </div>
+
+    <!-- Nombre Descripción -->  
+    <div>
+        <label for="descripcion">descripcion</label>
+        <input id="descripcion" class="form-control" formControlName="descripcion" type="text" placeholder="Ingrese descripción">
+    </div>
+
+    <!-- Precio -->  
+    <div>
+        <label for="precio">precio</label>
+        <input id="precio" class="form-control" formControlName="precio" type="number" placeholder="Ingrese precio">
+    </div>
+
+    <!-- Fechas ocultas -->
+    <div>
+        <label for="miInput" hidden>fecha de registro</label>
+    </div>
+
+    <div><label for="miInput" hidden>fecha actualizacions</label>
+    </div>   
+
+    <!-- Categoría -->
+    <div>
+        <label for="idCategoria">Categoria</label>
+        <select id="idCategoria" class="form-select" formControlName="idCategoria">
+            <option value= ""> seleccione una categoria</option>
+            <option *ngFor="let cat of categorias" [value]="cat.idCategoria">{{cat.nombreCategoria}}
+            </option>
+        </select>
+    </div>
+
+    <!-- Marca -->
+     <div>
+        <label for="idMarca">Marca</label>
+        <select  id="idMarca" class="form-select" formControlName="idMarca">
+            <option value= ""> seleccione una marca</option>
+            <option *ngFor="let mar of marcas" [value]="mar.idMarca">{{mar.nombreMarca}}
+            </option>
+        </select>
+    </div>
+
+    
+    
+    <div class="row">
+            <!-- Campo fotos de producto -->
+             <div class="formulario-col">
+                <label for="archivo"> Fotos del producto</label>
+                 <input id="archivo" type="file" class="form-control"
+                (change)="onFileSelected($event)" accept="image/*"
+                multiple>
+             </div>
+        </div>
+
+    <!-- Botón -->
+
+    <div class="d-grid mt-3">
+    <button class="btn btn-primary btn-guardar" type="submit" >GUARDAR PRODUCTO</button>
+    </div>
+    </fieldset>
+
+</form>

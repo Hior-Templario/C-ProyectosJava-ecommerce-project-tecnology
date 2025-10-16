@@ -1,14 +1,18 @@
 package com.development.ecommerce_tecnology.service;
 
-import com.development.ecommerce_tecnology.entity.Marca;
+import com.development.ecommerce_tecnology.dto.MarcaCrearDto;
+import com.development.ecommerce_tecnology.dto.MarcaDto;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface MarcaService {
 
-    List<Marca>obtenerTodas();
+    MarcaDto obtenerMarcaConImagenes(Long idMarca);
 
-    Marca crear (Marca marca);
+    List<MarcaDto> obtenerTodasMarcasConImagenes();
 
-    void eliminar (Long idMarca);
+    MarcaDto crearMarcaConImagen(MarcaCrearDto marcaCrearDto)throws IOException;
+
+    void eliminarMarca (Long idMarca);
 }

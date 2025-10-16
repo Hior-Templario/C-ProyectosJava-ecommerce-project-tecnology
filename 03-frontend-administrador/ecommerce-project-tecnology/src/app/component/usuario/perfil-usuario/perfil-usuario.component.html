@@ -1,0 +1,37 @@
+<div *ngIf="usuario" class="detalles-container">
+  <h2 class="detalles-titulo">
+    <strong>PERFIL DE: </strong> {{ usuario.nombreUsuario }}
+  </h2>
+
+  <div class="detalles-header">
+    <img class="detalles-imagen" [src]="usuario.imagenUsuario?.urlImagen" alt="Foto de usuario">
+
+    <div class="detalles-principales">
+      <p><strong>Correo electronico:</strong> {{ usuario.correo }}</p>
+      <p><strong>Fecha de registro:</strong> {{ usuario.fechaRegistro | date }}</p>
+      <p><strong>Rol:</strong> {{usuario.rol.nombreRol}}</p>
+      <p><strong>Estado de cuenta: </strong> <strong>{{usuario.estadoUsuario.nombreEstado}}</strong></p>
+    </div>
+
+  </div>
+
+
+<div *ngIf="usuario" class="detalles-especificos">
+  <h3>Datos personales</h3>
+  <p><strong>Nombres Persona</strong> {{usuario.persona.nombresPersona}}</p>
+  <p><strong>Apellidos: </strong> {{usuario.persona.apellidosPersona}}</p>
+  <p><strong>Tipo Documento:</strong> {{usuario.persona.tipoDocumento}}</p>
+  <p><strong>Numero Documento:</strong> {{usuario.persona.numeroDocumento}}</p>
+  <p><strong>Fecha Nacimiento:</strong> {{usuario.persona.fechaNacimiento}}</p>
+  <p><strong>Genero:</strong> {{usuario.persona.sexo}}</p>
+  <p><strong>Telefono:</strong> {{usuario.persona.telefono}}</p>
+  <p><strong>Correo Secundario:</strong> {{usuario.persona.correoSecundario}}</p>
+  <p><strong>Direccion:</strong> {{usuario.persona.direccion}}</p>
+  <p><strong>Ciudad:</strong> {{usuario.persona.ciudad}}</p>
+  <p><strong>Pais:</strong> {{usuario.persona.pais}}</p>
+</div>
+
+</div>
+<div *ngIf="!usuario">
+  <p>Cargando perfil...</p>
+</div>

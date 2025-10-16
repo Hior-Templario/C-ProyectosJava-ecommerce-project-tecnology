@@ -1,0 +1,422 @@
+
+
+/* ============================
+   Estilos de modal
+   ============================ */
+
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-content{
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+
+}
+
+
+/* ============================
+   Estilos de la barra superior
+   ============================ */
+
+.header-menu{
+    background-color:  #011126 ; /* Define el color de fondo azul obcuro  para la barra superior*/
+    display: flex; /*Aplica flexbox para organizar los elementos dentro de la barra*/
+    justify-content: space-between;/* Distribuye el espacio entre los elementos al máximo posible*/
+    align-items: center; /* Centra verticalmente los elementos*/
+}
+
+/* ============================
+   Contenedor de sesión
+   ============================ */
+
+.sesion{
+display: flex; /*Aplica flexbox para colocar los botones en fila*/
+gap: 20px; /* Define un espacio de 20 px entre los botones*/
+
+}
+
+.btn-fijo-sesion{
+    min-width: 140px;
+    text-align: center;
+}
+
+/*Botones dentro del contenedor de sesión*/
+.sesion button{
+    border:none;
+    padding: 10px 15px; /* Espaciado interno de 10px vertical y 15px horizontal*/
+    font-weight: bold;
+    font-size: 14PX;
+}
+
+/* ============================
+   Body
+   ============================ */
+
+.body{
+ 
+    background-color: #c8e2fd;
+    min-height: 820px; 
+    margin: 0 auto;
+    padding: 0 auto;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+
+    
+}
+
+
+/* ============================
+   Contenedor detalles
+   ============================ */
+
+.detalles-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #f9f9f9; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.detalles-titulo{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.detalles-header{
+
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.detalles-imagen{
+    width: 120px;
+    height: 120px;
+    border-radius: 10%;
+    object-fit: cover;
+    border: 2px solid #007bff; 
+}
+
+.detalles-principales{
+    margin: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.detalles-especificos{
+    margin-top: 1.5rem;
+
+}
+
+
+
+.detalles-especificos h3{
+    margin-top: 0.8rem;
+    color: #007bff;
+}
+
+
+.detalles-especificos p {
+    margin: 0.4rem 0;
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid #ddd;
+}
+
+/* ============================
+   Tabla
+   ============================ */
+
+table{
+ width: 95%;
+ margin: 20px auto;
+ border-collapse: collapse;
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 12px;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+ 
+}
+
+.tabla-encabezado{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #04346e;
+    padding: 12px 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15)
+
+}
+
+.tabla-encabezado h2{
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+
+.usuario-img{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.usuario-img:hover{
+    transform: scale(1.3);
+}
+
+th {
+    text-transform: uppercase;
+    background-color: #04346e;
+    color: white;
+    padding: 8px;
+}
+
+th, td{
+    border: 1px solid hsl(213, 87%, 63%) ;
+    padding: 4px;
+    text-align: left; 
+}
+
+.img {
+  width: 10%; 
+  height: 10%; 
+}
+
+
+.btn-crear{
+    background-color: #04346e;
+    
+}
+
+.listado-img{
+
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+   .paginacion{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+
+
+/* ============================
+   Formularios
+   ============================ */
+
+/* Establece general del formulario*/
+
+.form-fieldset{
+    padding: 1rem;
+    border: 1px solid  hsl(213, 62%, 80%) ;
+    border-radius: .375rem;;
+}
+
+.form-legend{
+    
+    background-color:  #04346e ; 
+    font-size: 1.25rem;
+    color: white; 
+    font-weight: bold;
+    border: 1px solid  hsl(213, 62%, 80%) ;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;  
+}
+
+.formulario-col{
+    margin-bottom: 1rem;
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+@media (min-width:768px) {
+    .formulario-col{
+        width: 50%;
+    }
+}
+
+.formulario {
+    border: 1px solid hsl(213, 87%, 63%) ;
+    max-width: 1200px;
+    width: 900px;
+    margin: 0 auto;
+    padding: 25px;
+    background-color: #f9f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    
+}
+
+
+/* Etiquetas */
+.formulario label{
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/*Input*/
+.formulario input,
+.formulario select {
+    margin-bottom: 3px;
+}
+
+/*Mensaje error*/
+.formulario .error {
+    font-size: 0.9rem;
+    color: #dc3545;
+}
+
+.btn-guardar {
+    min-width: 200px;
+    background-color: #dc3545;
+    border:none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-guardar:hover {
+    background-color: #dbbd12;
+}
+
+
+/* ============================
+   Menú lateral
+   ============================ */
+
+.aside-menu{
+    width: 270px;
+    min-width: 270px;
+    max-width: 270px;
+    background-color:  #04346e ;/* Establece un fondo azul mas claro*/
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.aside-menu ul{
+
+    list-style: none;
+    padding: 0;
+    margin:0;
+}
+
+.aside-menu li{
+margin: 8px 0;
+background-color: #285692;
+
+
+}
+
+.aside-menu li a{
+    font-size: 14px;
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+    padding: 4px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.aside-menu li a:hover,
+.aside-menu li a.active{
+    background-color: #0650b8;
+    color: #ffffff;
+}
+
+li a.no-underline{
+    text-decoration: none;
+}
+
+.menu-title{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 10px 15px;
+    margin: 12px 0 6px 0;
+    border-left: 4px solid #1a73e8;
+    background-color: #011126;
+    width: 100%;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: default;
+    border-radius: 0px;
+    box-sizing: border-box;
+}
+
+.contenedor {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    border:  2px solid #04346e ;
+
+    
+}
+
+.btn-fijo{
+    width: 130px;
+    height: 40px;
+    font-size: 14px;
+    margin-right: 10px;
+    border-radius: 5px;
+    padding: 1px;
+}
+
+
+
+
+____________________________________
+
+.categoria-item{
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.imagen-categoria{
+    max-width: 200px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.botones-accion{
+    margin: 10px 50px 10px 50px;
+}
+
+
+

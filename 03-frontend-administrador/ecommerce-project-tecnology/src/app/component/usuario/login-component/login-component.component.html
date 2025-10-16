@@ -1,0 +1,16 @@
+<form [formGroup]= "formLogin" (ngSubmit)="onSubmit()" class="formulario">
+
+   <fieldset class="form-fieldset">
+      <legend class="form-legend"> INICIAR SESIÓN</legend>
+     <div><label for=nombreUsuario></label>
+        <input id=nombreUsuario class="form-control" formControlName="nombreUsuario" type="text">
+     </div>
+
+    <div><label for=nombreUsuario> Contraseña</label>
+        <input id=nombreUsuario class="form-control" formControlName="contrasenia" type="password">
+     </div>
+
+        <button type="submit">Ingresar</button>
+      
+   </fieldset>
+</form>
