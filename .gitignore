@@ -1,5 +1,15 @@
-/01-database    
-/02-backend
-/03-frontend
+# Java / Maven
+**/target/
+**/.mvn/
+**/.idea/    
+*.iml
+
+# Node / Angular
+**/node_modules/
+**/dist
+/03-frontend/dist/
+/03-frontend/node_modules/
+
+# Misc 
 *.log
 *.env
