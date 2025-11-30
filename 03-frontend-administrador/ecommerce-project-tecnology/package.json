@@ -5,9 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ssr": "ng build && ng run ecommerce-project-tecnology:server",
+    "serve:ssr": "node dist/ecommerce-project-tecnology/server/server/main.mjs",
+    "prerender": "ng run ecommerce-project-tecnology:prerender",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:ecommerce-project-tecnology": "node dist/ecommerce-project-tecnology/server/server.mjs"
+    "test": "ng test"
+   
   },
   "private": true,
   "dependencies": {
@@ -21,6 +24,7 @@
     "@angular/platform-server": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@angular/ssr": "^19.0.6",
+    "@nguniversal/express-engine": "^7.0.2",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.5",
     "express": "^4.18.2",

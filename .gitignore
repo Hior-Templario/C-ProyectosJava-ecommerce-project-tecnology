@@ -1,5 +1,5 @@
-/02-backend/target/
-/03-frontend/node_modules/
-/03-frontend/dist/
+/01-database    
+/02-backend
+/03-frontend
 *.log
 *.env

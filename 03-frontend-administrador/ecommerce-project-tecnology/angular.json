@@ -78,6 +78,28 @@
           },
           "defaultConfiguration": "development"
         },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "ecommerce-project-tecnology:build:production",
+            "serverTarget": "ecommerce-project-tecnology:server:production",
+            "routes": [
+              "/",
+              "/dashboard",
+              "/listaProductos",
+              "/agregarProducto",
+              "/listarInventario",
+              "/listaCategorias",
+              "/crearCategoria",
+              "/listaMarca",
+              "/crearMarca",
+              "/listaUsuarios",
+              "/crearUsuarios",
+              "/login"
+            ]
+          }
+        },
+    
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
