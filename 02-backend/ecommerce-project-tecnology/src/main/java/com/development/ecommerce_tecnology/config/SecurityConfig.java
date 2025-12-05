@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,7 +43,7 @@ public class SecurityConfig {
                         // Permite el acceso sin autenticaaciòn a la pagina inicio, login,css,js
                         .requestMatchers(
                                         "/", "/api/login","/css/**","/js/**","/api/productos/**","/api/usuarios/**","/api/categorias/**", "/api/marcas/**", "/api/roles/**",
-                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/estadosUsuario/**", "/{idUsuario}"
+                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/estadosUsuario/**"
                                 ).permitAll()
                         // Solo permite acceso a la lista de usuarios a SOPORTE Y ADMIN
                         .requestMatchers("/usuarios").hasAnyRole("ADMIN","SOPORTE")
@@ -60,7 +61,7 @@ public class SecurityConfig {
 //                        .failureUrl("/login?error=true") // Redirige a la pàgina de login con mensaje de error si falla autenticaciòn
 //                        .permitAll() // Permite acceso a la pagina de login
 //                )
-                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout") // Redirige a la pàgina de login tras cerrar sesiòn
                         .invalidateHttpSession(true) // Invalida la sesiòn al cerrar sesiòn
@@ -73,9 +74,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:4200",
+                "https://proyectos-angular-ecommerce-project.vercel.app",
+                "https://*.vercel.app"
+        ));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =new UrlBasedCorsConfigurationSource();
