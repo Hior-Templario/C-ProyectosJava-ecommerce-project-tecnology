@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Categoria } from "../models/categoria";
+import { environment } from "../../environments/enviroment";
 
 @Injectable({
     providedIn : 'root'
@@ -9,7 +10,7 @@ import { Categoria } from "../models/categoria";
 
 export class CategoriaService{
 
-   private apiUrl = 'http://localhost:8080/api/categorias';
+   private apiUrl = (`${environment.backendUrl}/categorias`);
    
 
    constructor(private http: HttpClient){}

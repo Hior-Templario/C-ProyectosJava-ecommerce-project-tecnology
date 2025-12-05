@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Usuario } from "../models/usuario";
 import { UsuarioPersonaAdapter } from "../models/usuario-persona-adapter";
+import { environment } from "../../environments/enviroment";
 
 
 
@@ -14,7 +15,8 @@ import { UsuarioPersonaAdapter } from "../models/usuario-persona-adapter";
 export class UsuarioService{
 
     // Url base del backend para acceder a los endpoints relacionados con el producto
-    private apiUrl = 'http://localhost:8080/api/usuarios';
+    private apiUrl = (`${environment.backendUrl}/usuarios`);
+    
 
     // inyeccion del servicio HttpClient para poder realizar peticiones HTTP
     constructor ( private http:HttpClient,

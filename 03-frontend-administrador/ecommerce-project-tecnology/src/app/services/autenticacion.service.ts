@@ -6,6 +6,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 // Importa isPlatformBrowser para determinar si la aplicación se ejecuta en un navegador
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/enviroment';
 
 // Define la interfaz LoginResponse que presenta la estructura de los datos que devuelve el backend al iniciar sesión
 interface LoginResponse{
@@ -24,7 +25,7 @@ interface LoginResponse{
 export class AutenticacionService {
 
   // Define la URL del endpoint de login en el backend
-   private apiUrl = 'http://localhost:8080/api/login';
+   private apiUrl = (`${environment.backendUrl}/login`);
    // Define una variable que indica si la aplicación se ejecuta en un navegador
    private isBrowser: boolean;
    

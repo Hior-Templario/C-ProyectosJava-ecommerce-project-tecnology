@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Rol } from "../models/rol";
+import { environment } from "../../environments/enviroment";
 
 @Injectable ({
     providedIn : 'root'
@@ -9,8 +10,8 @@ import { Rol } from "../models/rol";
 
 export class RolService{
 
-    private apiUrl ='http://localhost:8080/api/roles';
-
+    private apiUrl = (`${environment.backendUrl}/roles`);
+    
     constructor (private http: HttpClient){}
 
     obtenerRoles(): Observable<Rol[]>{

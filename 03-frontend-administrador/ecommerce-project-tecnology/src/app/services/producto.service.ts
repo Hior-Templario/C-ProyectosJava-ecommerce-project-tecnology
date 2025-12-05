@@ -7,6 +7,7 @@ import { map, Observable } from "rxjs";
 // Importa el cliente HTTP de Angular para hacer peticiones al servidor de backend
 import { HttpClient } from "@angular/common/http";
 import { ProductoAdapter } from "../models/producto-adapter";
+import { environment } from "../../environments/enviroment";
 
 
 
@@ -18,7 +19,9 @@ import { ProductoAdapter } from "../models/producto-adapter";
 export class ProductoService{
 
     // Url base del backend para acceder a los endpoints relacionados con el producto
-    private apiUrl = 'http://localhost:8080/api/productos';
+
+    private apiUrl = (`${environment.backendUrl}/productos`);
+    
 
     
     // inyeccion del servicio HttpClient para poder realizar peticiones HTTP
