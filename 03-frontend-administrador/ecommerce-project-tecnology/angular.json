@@ -35,12 +35,7 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -77,27 +72,6 @@
             }
           },
           "defaultConfiguration": "development"
-        },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "browserTarget": "ecommerce-project-tecnology:build:production",
-            "serverTarget": "ecommerce-project-tecnology:server:production",
-            "routes": [
-              "/",
-              "/dashboard",
-              "/listaProductos",
-              "/agregarProducto",
-              "/listarInventario",
-              "/listaCategorias",
-              "/crearCategoria",
-              "/listaMarca",
-              "/crearMarca",
-              "/listaUsuarios",
-              "/crearUsuarios",
-              "/login"
-            ]
-          }
         },
     
         "extract-i18n": {

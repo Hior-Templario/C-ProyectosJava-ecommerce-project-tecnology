@@ -20,7 +20,7 @@ import { RegistrarMovimientoComponent } from "./app/component/inventario/registr
 import { ListarInventarioComponent } from "./app/component/inventario/listar-inventario/listar-inventario.component";
 import { provideAnimations } from "@angular/platform-browser/animations";
 
-const routes: Routes = [ // Se definen las rutas disponibles en la app
+const routes: Routes = [ // Se definen las rutas disponibles en la app.
 
 {   path: 'dashboard', component: DashboardComponent },
 {   path: 'listaProductos', component: ListaProductoComponent }, 
