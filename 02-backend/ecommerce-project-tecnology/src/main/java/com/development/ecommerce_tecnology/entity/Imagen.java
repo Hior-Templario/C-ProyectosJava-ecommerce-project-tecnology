@@ -3,10 +3,9 @@ package com.development.ecommerce_tecnology.entity;
 import com.development.ecommerce_tecnology.enums.TipoEntidad;
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name ="imagen")
-public class Imagen {
+public class  Imagen {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +14,9 @@ public class Imagen {
 
     @Column(name = "url_imagen")
     private String urlImagen;
+
+    @Column(name = "s3key")
+    private String s3key;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo" , nullable = false)
@@ -38,6 +40,14 @@ public class Imagen {
 
     public void setUrlImagen(String urlImagen) {
         this.urlImagen = urlImagen;
+    }
+
+    public String getS3key() {
+        return s3key;
+    }
+
+    public void setS3key(String s3key) {
+        this.s3key = s3key;
     }
 
     public TipoEntidad getTipo() {

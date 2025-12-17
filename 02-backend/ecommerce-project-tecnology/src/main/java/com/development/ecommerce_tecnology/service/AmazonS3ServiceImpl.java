@@ -5,6 +5,7 @@ import com.development.ecommerce_tecnology.entity.Imagen;
 import com.development.ecommerce_tecnology.enums.TipoEntidad;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -13,6 +14,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AmazonS3ServiceImpl implements AmazonS3Service {
@@ -29,7 +31,10 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public String subirArchivo(MultipartFile archivo, String nombreArchivo , TipoEntidad tipo, Long idEntidad) throws IOException {
+    public String subirArchivo(MultipartFile archivo, TipoEntidad tipo, Long idEntidad) throws IOException {
+
+        String nombreArchivo = UUID.randomUUID() + "_" + archivo.getOriginalFilename();
+
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(nombreArchivo)
@@ -42,6 +47,7 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
 
         Imagen imagen = new Imagen();
         imagen.setUrlImagen(url);
+        imagen.setS3key(nombreArchivo);
         imagen.setTipo(tipo);
         imagen.setIdEntidad(idEntidad);
 
@@ -52,46 +58,48 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public void eliminarArchivo(String nombreArchivo) {
+    public void eliminarArchivoPorKey(String s3Key) {
         DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
-                .key(nombreArchivo)
+                .key(s3Key)
                 .build();
 
         s3Client.deleteObject(deleteRequest);
 
-        String url = "https://" + bucketName + ".s3.amazonaws.com/" + nombreArchivo;
-        imagenRepository.deleteByUrlImagen(url);
+        imagenRepository.deleteByS3key(s3Key);
 
     }
 
     @Override
+    @Transactional
     public void eliminarArchivoPorEntidad(TipoEntidad tipo, Long idEntidad) {
 
-        List<Imagen> imagenes= imagenRepository.findByIdEntidad(idEntidad);
+        List<Imagen> imagenes=
+                imagenRepository.findByTipoAndIdEntidad(tipo, idEntidad);
+
+        if (imagenes.isEmpty()){
+            return;
+        }
 
         for (Imagen imagen : imagenes) {
-            String nombreArchivo = extraerNombreDeUrl(imagen.getUrlImagen());
 
             try {
-                DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+
+               DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                         .bucket(bucketName)
-                        .key(nombreArchivo)
+                        .key(imagen.getS3key())
                         .build();
 
-                s3Client.deleteObject(deleteRequest);
+               s3Client.deleteObject(deleteObjectRequest);
+
             } catch (Exception e){
                 // Puedes loguear el error o notificar según el caso
-                System.err.println("Error al eliminar archivo en S3: " + nombreArchivo);
+                System.err.println("Error al eliminar archivo en S3: " + imagen.getS3key()
+                );
             }
         }
 
         imagenRepository.deleteByTipoAndIdEntidad(tipo, idEntidad);
-    }
-
-    private String extraerNombreDeUrl(String url){
-        if (url == null || !url.contains("/")) return "";
-        return url.substring(url.lastIndexOf("/") + 1);
     }
 
 }

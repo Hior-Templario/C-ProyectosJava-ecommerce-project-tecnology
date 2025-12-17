@@ -109,7 +109,7 @@ public class MarcaServiceImpl implements MarcaService{
             }
             Long idEntidad = marca.getIdMarca();
             // Subir archivo a Amazon S3
-            amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo,img.getTipo(),idEntidad);
+           // amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo,img.getTipo(),idEntidad);
         }
 
         else {

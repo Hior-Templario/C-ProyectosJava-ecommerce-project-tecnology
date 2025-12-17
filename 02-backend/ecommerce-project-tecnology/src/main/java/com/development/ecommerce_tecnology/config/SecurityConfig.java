@@ -5,7 +5,6 @@ import com.development.ecommerce_tecnology.service.UsuarioDetallesServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,7 +31,6 @@ public class SecurityConfig {
         this.usuarioDetallesServicioImpl = usuarioDetallesServicioImpl;
     }
 
-
     @Bean
     public SecurityFilterChain FilterChain(HttpSecurity http) throws    Exception {
         // Configura la seguridad de las rutas y autentticacion.
@@ -43,7 +41,7 @@ public class SecurityConfig {
                         // Permite el acceso sin autenticaaciòn a la pagina inicio, login,css,js
                         .requestMatchers(
                                         "/", "/api/login","/css/**","/js/**","/api/productos/**","/api/usuarios/**","/api/categorias/**", "/api/marcas/**", "/api/roles/**",
-                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/estadosUsuario/**"
+                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/estadosUsuario/** " , "/api/imagenes/**"
                                 ).permitAll()
                         // Solo permite acceso a la lista de usuarios a SOPORTE Y ADMIN
                         .requestMatchers("/usuarios").hasAnyRole("ADMIN","SOPORTE")
@@ -102,7 +100,5 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-
 
 }

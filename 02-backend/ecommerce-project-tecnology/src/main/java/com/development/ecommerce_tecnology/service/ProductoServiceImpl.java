@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -132,6 +133,7 @@ public class ProductoServiceImpl implements ProductoService {
         return productoMapper.mappearProductoDto(producto, imagenesPorProducto,imagenesPorCategoria, imagenesPorMarca );
     }
 
+
     @Override
     public List<Producto> buscarPorCodigoONombre(String query) {
 
@@ -149,15 +151,11 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional
     public ProductoDto crearProductoConImagenes(ProductoCrearDto productocrearDto) throws IOException{
 
-        System.out.println("ID Categoria desde DTO:" + productocrearDto.getIdCategoria());
-        System.out.println("ID marca desde DTO:" + productocrearDto.getIdMarca());
-
         Categoria categoria = categoriaRepository.findById(productocrearDto.getIdCategoria())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria no encontrado"));
 
         Marca marca = marcaRepository.findById(productocrearDto.getIdMarca())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Marca no encontrada"));
-
 
         String prefijo = categoriaRepository.obtenerPrefijoPorId(productocrearDto.getIdCategoria());
 
@@ -181,18 +179,13 @@ public class ProductoServiceImpl implements ProductoService {
 
 
         // Obtener lalista de imagenes enviadas desde DTO
-        List<ImagenCrearDto> img = productocrearDto.getImagenesProducto();
-        logger.info("Llegaron imagenes?:" + img);
+        List<ImagenCrearDto> imagenes = productocrearDto.getImagenesProducto();
 
-        if (img!= null && !img.isEmpty()  ){
-            logger.info("Imagenes recibidas");
+        if (imagenes != null && !imagenes.isEmpty()  ){
 
-            for(ImagenCrearDto imagen : img){
-                Long idEntidad= producto.getIdProducto();
-                String nombreArchivo = UUID.randomUUID() + "_" + imagen.getArchivo().getOriginalFilename();
+            for(ImagenCrearDto imagenDto : imagenes){
 
-                amazonS3Service.subirArchivo(imagen.getArchivo(), nombreArchivo,imagen.getTipo(), idEntidad);
-
+                amazonS3Service.subirArchivo(imagenDto.getArchivo(),imagenDto.getTipo(), producto.getIdProducto());
             }
 
         }
@@ -201,6 +194,29 @@ public class ProductoServiceImpl implements ProductoService {
                  }
 
         return obtenerProductoConImagenes(producto.getIdProducto());
+
+    }
+
+    @Override
+    @Transactional
+    public ProductoDto actualizaProducto(Long idProducto, ProductoActualizarDto productoActualizarDto) throws IOException {
+
+        Producto producto = productoRepository.findById(idProducto)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
+
+
+        Categoria categoria = categoriaRepository.findById(productoActualizarDto.getIdCategoria())
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria no encontrado"));
+
+        Marca marca = marcaRepository.findById(productoActualizarDto.getIdMarca())
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Marca no encontrada"));
+
+        // Actualiza  datos del producto
+        actualizarProductoDesdeDto(producto, productoActualizarDto, categoria, marca );
+
+        productoRepository.save(producto);
+
+        return  convertirADto(producto);
 
     }
 
@@ -233,17 +249,24 @@ public class ProductoServiceImpl implements ProductoService {
         return productos;
     }
 
-
     @Override
+    @Transactional
     public void eliminarProducto(Long idProducto) {
+
         if(!productoRepository.existsById(idProducto)){
             throw new EntityNotFoundException("Producto no encontrado para eliminar");
         }
+
+        // Eliminar imagenes asociadas
+
+        amazonS3Service.eliminarArchivoPorEntidad(
+                TipoEntidad.PRODUCTO,
+                idProducto
+        );
+
         productoRepository.deleteById(idProducto);
 
     }
-
-
 
     //=================================== Metodos auxiliares==============================
 
@@ -260,10 +283,8 @@ public class ProductoServiceImpl implements ProductoService {
 
     }
 
-
     //Construir  Producto desde Dto
     private Producto construirProductoDesdeDto(ProductoCrearDto productoDto, Categoria categoria, Marca marca, String codigoGenerado) {
-
 
         Producto producto = new Producto();
         producto.setCodigoProducto(codigoGenerado);
@@ -279,6 +300,7 @@ public class ProductoServiceImpl implements ProductoService {
         return producto;
     }
 
+
     private void cargarImagenesParaProducto(Producto producto){
 
         producto.setImagenes(cargarImagenes(TipoEntidad.PRODUCTO, producto.getIdProducto()));
@@ -290,6 +312,56 @@ public class ProductoServiceImpl implements ProductoService {
         if(producto.getMarca() != null){
             producto.getMarca().setImagenes(cargarImagenes(TipoEntidad.MARCA, producto.getMarca().getIdMarca()));
         }
+
+    }
+
+    private void actualizarProductoDesdeDto(Producto producto, ProductoActualizarDto productoActualizarDto, Categoria categoria, Marca marca) {
+
+        if (productoActualizarDto.getNombreProducto() != null){
+            producto.setNombreProducto(productoActualizarDto.getNombreProducto());
+        }
+
+        if (productoActualizarDto.getDescripcion() != null){
+            producto.setDescripcion(productoActualizarDto.getDescripcion());
+        }
+
+        if (productoActualizarDto.getPrecio() != null){
+            producto.setPrecio(productoActualizarDto.getPrecio());
+        }
+
+        if (categoria != null){
+            producto.setCategoria(categoria);
+        }
+
+        if (marca != null){
+            producto.setMarca(marca);
+        }
+
+
+        producto.setFechaActualizacion(LocalDateTime.now());
+    }
+
+
+    private ProductoDto convertirADto(Producto producto) {
+
+        ProductoDto productoDto = new ProductoDto();
+
+        productoDto.setIdProducto(producto.getIdProducto());
+        productoDto.setCodigoProducto(producto.getCodigoProducto());
+        productoDto.setNombreProducto(producto.getNombreProducto());
+        productoDto.setDescripcion(producto.getDescripcion());
+        productoDto.setPrecio(producto.getPrecio());
+        productoDto.setFechaRegistro(producto.getFechaRegistro());
+        productoDto.setFechaActualizacion(producto.getFechaActualizacion());
+
+
+        productoDto.setIdCategoria(producto.getCategoria().getIdCategoria());
+        productoDto.setNombreCategoria(producto.getCategoria().getNombreCategoria());
+
+        productoDto.setIdMarca(producto.getMarca().getIdMarca());
+        productoDto.setNombreMarca(producto.getMarca().getNombreMarca());
+
+        return productoDto;
 
     }
 

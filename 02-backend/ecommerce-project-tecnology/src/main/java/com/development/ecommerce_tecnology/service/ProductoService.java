@@ -1,10 +1,12 @@
 package com.development.ecommerce_tecnology.service;
 
+import com.development.ecommerce_tecnology.dto.ProductoActualizarDto;
 import com.development.ecommerce_tecnology.dto.ProductoDto;
 import com.development.ecommerce_tecnology.dto.ProductoCrearDto;
 import com.development.ecommerce_tecnology.entity.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +21,8 @@ public interface ProductoService {
     Page<ProductoDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable);
 
     ProductoDto crearProductoConImagenes(ProductoCrearDto productoDto)throws IOException;
+
+    ProductoDto actualizaProducto(Long idProducto, ProductoActualizarDto productoActualizarDtoC )throws IOException;
 
     void eliminarProducto(Long idProducto);
 

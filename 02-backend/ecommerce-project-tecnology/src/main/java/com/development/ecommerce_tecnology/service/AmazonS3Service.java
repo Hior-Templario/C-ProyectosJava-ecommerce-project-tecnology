@@ -7,10 +7,11 @@ import java.io.IOException;
 
 public interface AmazonS3Service {
 
-    String subirArchivo(MultipartFile archivo, String nombreArchivo , TipoEntidad tipo, Long idEntidad)throws IOException ;
+    String subirArchivo(MultipartFile archivo , TipoEntidad tipo, Long idEntidad)throws IOException ;
 
-    void eliminarArchivo(String nombreArchivo);
+    void eliminarArchivoPorKey(String s3Key);
 
     void eliminarArchivoPorEntidad(TipoEntidad tipo, Long idEntidad);
+
 
 }

@@ -22,7 +22,10 @@ public interface ImagenRepository extends JpaRepository<Imagen, Long> {
     // --- Métodos de eliminación ---
     @Transactional
     @Modifying
-    void  deleteByUrlImagen (String urlImagen);
+    void deleteByS3key (String s3key );
+
+
+    // --- Métodos de eliminación por entidad ---
 
     @Transactional
     @Modifying

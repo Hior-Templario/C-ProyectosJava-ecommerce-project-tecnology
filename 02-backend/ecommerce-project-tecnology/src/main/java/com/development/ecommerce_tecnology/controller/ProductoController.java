@@ -1,11 +1,13 @@
 package com.development.ecommerce_tecnology.controller;
 
 import com.development.ecommerce_tecnology.dto.ImagenCrearDto;
+import com.development.ecommerce_tecnology.dto.ProductoActualizarDto;
 import com.development.ecommerce_tecnology.dto.ProductoCrearDto;
 import com.development.ecommerce_tecnology.dto.ProductoDto;
 import com.development.ecommerce_tecnology.entity.Producto;
 import com.development.ecommerce_tecnology.enums.TipoEntidad;
 import com.development.ecommerce_tecnology.service.ProductoService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -87,6 +89,7 @@ public class ProductoController {
 
 
             @RequestParam(value = "archivo", required = false) List<MultipartFile> archivos,
+            @RequestParam(value = "s3Key", required = false) TipoEntidad s3Key,
             @RequestParam(value = "tipo", required = false) TipoEntidad tipo
 
 
@@ -130,6 +133,13 @@ public class ProductoController {
         ProductoDto productoGuardado = productoService.crearProductoConImagenes(productoCrearDto);
 
         return new ResponseEntity<>(productoGuardado, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("actualizarProducto/{idProducto}")
+    public ResponseEntity<ProductoDto> ActualizarProducto(@PathVariable Long idProducto, @Valid @RequestBody ProductoActualizarDto productoActualizarDto)throws IOException{
+        ProductoDto productoActualizado = productoService.actualizaProducto(idProducto,productoActualizarDto );
+        return ResponseEntity.ok(productoActualizado);
     }
 
     @DeleteMapping("/eliminarProducto/{idProducto}")

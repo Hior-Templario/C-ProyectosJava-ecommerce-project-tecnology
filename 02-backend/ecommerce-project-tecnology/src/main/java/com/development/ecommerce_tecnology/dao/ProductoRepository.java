@@ -13,28 +13,28 @@ import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
-    // --- Métodos de búsqueda ---
+    // Métodos de búsqueda
     List<Producto> findByCategoria_IdCategoria(Long idCategoria);
     List<Producto> findByMarca_IdMarca(Long idMarca);
-
-
-
     List<Producto> findByCodigoProductoContainingIgnoreCaseOrNombreProductoContainingIgnoreCase(
             String codigoProducto ,String nombreProducto);
+
+
+    // Métodos de actualización
+
+
+
+
+
 
 
 
     // Devuelve una pagina de productos (Spring ya maneja LIMIT/OFFSET en SQL)
 
-
-    @Query("Select p FROM Producto p")
-    Page<Producto> findAllProductos(Pageable pageable);
-
     // __ Contar productos para incrementar codigo producto
     @Query("SELECT COUNT(p) FROM Producto p WHERE p.categoria.idCategoria = :idCategoria")
     Long contarPorCategoria(@Param("idCategoria")Long idCategoria);
 
-    // --
 
 }
 

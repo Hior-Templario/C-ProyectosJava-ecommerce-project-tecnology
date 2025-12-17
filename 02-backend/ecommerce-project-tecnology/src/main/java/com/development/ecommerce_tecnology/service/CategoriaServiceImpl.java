@@ -108,7 +108,6 @@ public class CategoriaServiceImpl implements CategoriaService {
         Categoria categoria = construirCategoriaDesdeDto(categoriaCrearDto);
         categoriaRepository.save(categoria);
 
-
         // Obtener la imagen enviada desde DTO
         ImagenCrearDto img = categoriaCrearDto.getImagenCategoria();
         logger.info("Llego imagen?:" + img);
@@ -126,7 +125,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
             Long idEntidad = categoria.getIdCategoria();
             // Subir archivo a Amazon S3
-            amazonS3Service.subirArchivo(img.getArchivo(),nombreArchivo,img.getTipo(),idEntidad);
+            //amazonS3Service.subirArchivo(img.getArchivo(),nombreArchivo,img.getTipo(),idEntidad);
         }
         else {
             System.out.println("Imagen No Recibida");
@@ -149,10 +148,6 @@ public class CategoriaServiceImpl implements CategoriaService {
         return categoria;
 
     }
-
-
-
-
 
 
     @Override

@@ -130,7 +130,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                 imagenesPorUsuario.put(usuario.getIdUsuario(),imagen);
             }
         }
-
         return usuarios.stream()
                 .map(u-> usuarioMapper.mappearUsuarioPersonaDto(u, imagenesPorUsuario)).collect(Collectors.toList());
     }
@@ -172,7 +171,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
                     Long idEntidad= usuario.getIdUsuario();
                     // Subir archivo a Amazon S3
-                    amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
+                    //amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
 
                 }
                 else {
@@ -219,7 +218,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
                     Long idEntidad= usuario.getIdUsuario();
                     // Subir archivo a Amazon S3
-                    amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
+//amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
 
                 }
                 else {
