@@ -1,0 +1,19 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": [
+      "node"
+    ]
+  },
+  "files": [
+    "src/browser.ts",  // Punto de entrada de la aplicación Angular; aqui se arranca el bootstrap de AppComponent
+    "src/polyfills.ts"// Importa Zone.js necesario para que Angular funcione en todos los navegadores
+
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
+}
