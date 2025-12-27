@@ -7,8 +7,10 @@ import { map, Observable } from "rxjs";
 // Importa el cliente HTTP de Angular para hacer peticiones al servidor de backend
 import { HttpClient } from "@angular/common/http";
 import { ProductoAdapter } from "../models/producto-adapter";
-import { environment } from "../../environments/enviroment";
+
 import { ProductoActualizacion } from "../models/productoActualiacion";
+import { environment } from "../../environments/environment";
+
 
 
 

@@ -6,7 +6,9 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 // Importa isPlatformBrowser para determinar si la aplicación se ejecuta en un navegador
 import { isPlatformBrowser } from '@angular/common';
-import { environment } from '../../environments/enviroment';
+import { environment } from '../../environments/environment';
+
+
 
 // Define la interfaz LoginResponse que presenta la estructura de los datos que devuelve el backend al iniciar sesión
 interface LoginResponse{

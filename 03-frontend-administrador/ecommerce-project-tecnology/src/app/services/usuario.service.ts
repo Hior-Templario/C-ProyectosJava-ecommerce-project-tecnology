@@ -4,8 +4,11 @@ import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Usuario } from "../models/usuario";
 import { UsuarioPersonaAdapter } from "../models/usuario-persona-adapter";
-import { environment } from "../../environments/enviroment";
+
 import { UsuarioActualizacion } from "../models/usuarioActualizacion";
+import { environment } from "../../environments/environment";
+
+
 
 
 
