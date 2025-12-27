@@ -86,7 +86,7 @@ align-items: center;
 .body{
  
     background-color: #c8e2fd;
-    min-height: 820px; 
+    min-height: auto; 
     margin: 0 auto;
     padding: 0 auto;
     max-width: 100%;

@@ -32,4 +32,6 @@ public class ImagenCrearDto {
     public void setTipo(TipoEntidad tipo) {
         this.tipo = tipo;
     }
+
+
 }

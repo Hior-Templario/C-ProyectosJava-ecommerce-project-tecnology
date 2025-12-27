@@ -2,7 +2,6 @@ package com.development.ecommerce_tecnology.service;
 
 import com.development.ecommerce_tecnology.dao.ImagenRepository;
 import com.development.ecommerce_tecnology.dao.MarcaRepository;
-import com.development.ecommerce_tecnology.dto.ImagenCrearDto;
 import com.development.ecommerce_tecnology.dto.ImagenDto;
 import com.development.ecommerce_tecnology.dto.MarcaCrearDto;
 import com.development.ecommerce_tecnology.dto.MarcaDto;
@@ -22,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -32,29 +31,48 @@ public class MarcaServiceImpl implements MarcaService{
     private static final Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
     private final MarcaRepository marcaRepository;
-    private final ImagenRepository imagenRepository;
+    private final ImagenService imagenService;
     private final AmazonS3Service amazonS3Service;
 
-    public MarcaServiceImpl(MarcaRepository marcaRepository, ImagenRepository imagenRepository, AmazonS3Service amazonS3Service) {
+    public MarcaServiceImpl(MarcaRepository marcaRepository, ImagenRepository imagenRepository, ImagenService imagenService, AmazonS3Service amazonS3Service) {
         this.marcaRepository = marcaRepository;
-        this.imagenRepository = imagenRepository;
+        this.imagenService = imagenService;
         this.amazonS3Service = amazonS3Service;
+
     }
 
+
+    @Override
+    public Marca obtenerMarcaPorId(Long idMarca) {
+
+        return marcaRepository.findById(idMarca).
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Narca bno encontrada"));
+    }
 
     @Override
     @Transactional(readOnly = true)
     public MarcaDto obtenerMarcaConImagenes(Long idMarca) {
 
+        // Busca marca en base de datos
         Marca marca = marcaRepository.findById(idMarca)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Marca no encontrada"));
 
-        List<Imagen> imagenes = imagenRepository.findByTipoAndIdEntidad(TipoEntidad.MARCA, idMarca);
+        // Obtiene las imagenes asociadas a la marca
+        List<Imagen> imagenesMarca = imagenService.obtenerImagenesDeEntidad(TipoEntidad.MARCA, idMarca);
 
-        List<ImagenDto> imagenesMarcaDto = imagenes.stream()
+       // Validar que la marca tenga imàgenes
+        if (imagenesMarca == null  || imagenesMarca.isEmpty()){
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontaron imànebes");
+        }
+
+        // Convetir las entidades Imagen a DTO
+        List<ImagenDto> imagenMarcaDtos = imagenesMarca.stream()
                 .map(ImagenDto::new)
                 .collect(Collectors.toList());
-        return new MarcaDto(marca , imagenesMarcaDto);
+
+        // Retomar DTO completo de la categoria
+        return new MarcaDto(marca, imagenMarcaDtos);
 
     }
 
@@ -62,14 +80,16 @@ public class MarcaServiceImpl implements MarcaService{
     @Transactional(readOnly = true)
     public List<MarcaDto> obtenerTodasMarcasConImagenes() {
 
+        // Obtener todas las marcas registradas
         List<Marca> marcas = marcaRepository.findAll();
 
+        // Extraer los IDS de las marcas
         List<Long> idsMarca = marcas.stream()
                 .map(Marca::getIdMarca)
                 .collect(Collectors.toList());
 
-        Map<Long, List<Imagen>> imagenesPorCategoria = imagenRepository.findByTipoAndIdEntidadIn(TipoEntidad.MARCA, idsMarca)
-                .stream().collect(Collectors.groupingBy(Imagen::getIdEntidad));
+        // Obtener todas las imagenes agrupadas por ID de marca
+        Map<Long, List<Imagen>> imagenesPorCategoria = imagenService.obtenerImagenesDeEntidades(TipoEntidad.MARCA, idsMarca);
 
         return marcas.stream()
                 .map(marca -> {
@@ -87,7 +107,10 @@ public class MarcaServiceImpl implements MarcaService{
     }
 
 
+    // Metodo para  crear una nueva  marca con su respectiva imagen
+
     @Override
+    @Transactional
     public MarcaDto crearMarcaConImagen(MarcaCrearDto marcaCrearDto)  throws IOException {
 
         // Construir entidad marca desde el Dto y guardar en BD
@@ -95,34 +118,19 @@ public class MarcaServiceImpl implements MarcaService{
         Marca marca = construirMarcaDesdeDto(marcaCrearDto);
         marcaRepository.save(marca);
 
-        // Obtener la imagen enviada desde Dto
-        ImagenCrearDto img = marcaCrearDto.getImagenMarca();
+        // Subir imagenes asociadas al producto
+        imagenService.subirImagenPorEntidad(
+                marcaCrearDto.getImagenMarca(),
+                TipoEntidad.MARCA,
+                marca.getIdMarca());
 
-        // Validar si hay archivo de imagen válida
-        if (img !=null && img.getArchivo() !=null && !img.getArchivo().isEmpty()){
-            logger.info("Imagen recibida");
-
-            // generar nombre unico para el archivo
-            String nombreArchivo = UUID.randomUUID() + "_" + img.getArchivo().getOriginalFilename();
-            if (img.getTipo() != TipoEntidad.MARCA) {
-                throw new IllegalArgumentException("Solo se permite tipo Marca");
-            }
-            Long idEntidad = marca.getIdMarca();
-            // Subir archivo a Amazon S3
-           // amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo,img.getTipo(),idEntidad);
-        }
-
-        else {
-
-            System.out.println("Imagen No Recibida");
-
-        }
-
+        // Retonar DTO con informacion completa del usurio, incluyendo imagen
         return obtenerMarcaConImagenes(marca.getIdMarca());
     }
 
     // Metodo auxiliar para construir un objeto marca desdes DTO
 
+    // Construye un objeto Marca a partir del DRO de creaciòn
     private Marca construirMarcaDesdeDto(MarcaCrearDto marcaCrearDto){
 
         Marca marca = new Marca();
@@ -135,6 +143,7 @@ public class MarcaServiceImpl implements MarcaService{
     @Override
     public void eliminarMarca(Long idMarca) {
 
+        // Eliminar la marca
         marcaRepository.deleteById(idMarca);
 
     }

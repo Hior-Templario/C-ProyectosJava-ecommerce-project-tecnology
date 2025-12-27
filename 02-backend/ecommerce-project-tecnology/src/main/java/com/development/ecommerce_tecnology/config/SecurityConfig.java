@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Permite el acceso sin autenticaaciòn a la pagina inicio, login,css,js
                         .requestMatchers(
-                                        "/", "/api/login","/css/**","/js/**","/api/productos/**","/api/usuarios/**","/api/categorias/**", "/api/marcas/**", "/api/roles/**",
-                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/estadosUsuario/** " , "/api/imagenes/**"
+                                        "/", "/api/login","/css/**","/js/**","/api/productos/**","/api/usuarios/**","/api/categorias/**", "/api/marcas/**", "/api/estadosUsuario/**",
+                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/roles/**" , "/api/imagenes/**"
                                 ).permitAll()
                         // Solo permite acceso a la lista de usuarios a SOPORTE Y ADMIN
                         .requestMatchers("/usuarios").hasAnyRole("ADMIN","SOPORTE")

@@ -6,7 +6,6 @@ import com.development.ecommerce_tecnology.dto.ProductoCrearDto;
 import com.development.ecommerce_tecnology.entity.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,9 +27,9 @@ public interface ProductoService {
 
     List<Producto> buscarPorCodigoONombre(String query);
 
-    List<Producto> obtenerProductosPorCategoria( Long idCategoria);
-
-    List<Producto> obtenerProductosPorMarca(Long idMarca);
+//    List<Producto> obtenerProductosPorCategoria( Long idCategoria);
+//
+//    List<Producto> obtenerProductosPorMarca(Long idMarca);
 
 
 }

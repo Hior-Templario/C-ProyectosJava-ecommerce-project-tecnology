@@ -1,8 +1,5 @@
 package com.development.ecommerce_tecnology.service;
 
-import com.development.ecommerce_tecnology.dao.CategoriaRepository;
-import com.development.ecommerce_tecnology.dao.ImagenRepository;
-import com.development.ecommerce_tecnology.dao.MarcaRepository;
 import com.development.ecommerce_tecnology.dao.ProductoRepository;
 import com.development.ecommerce_tecnology.dto.*;
 import com.development.ecommerce_tecnology.entity.*;
@@ -26,31 +23,31 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
+    // Repositorios y servicios necesarios para operaciones sobre productos, categorías, marcas e imágenes
     private final ProductoRepository productoRepository;
-    private final ImagenRepository imagenRepository;
-    private final CategoriaRepository categoriaRepository;
-    private final MarcaRepository marcaRepository;
-    private final AmazonS3Service amazonS3Service;
+    private final CategoriaService categoriaService;
+    private final MarcaService marcaService;
+    private final ImagenService imagenService;
     private final ProductoMapper productoMapper;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductoServiceImpl.class);
+    // Logger para registrar eventos y errores
+    private static final Logger logger =
+            LoggerFactory.getLogger(ProductoServiceImpl.class);
 
-    public ProductoServiceImpl(ProductoRepository productoRepository, ImagenRepository imagenRepository, CategoriaRepository categoriaRepository, MarcaRepository marcaRepository, AmazonS3Service amazonS3Service, ProductoMapper productoMapper) {
+    // Constructor para inyección de dependencias
+    public ProductoServiceImpl(ProductoRepository productoRepository,  CategoriaService categoriaService, MarcaService marcaService, ImagenService imagenService, ProductoMapper productoMapper) {
         this.productoRepository = productoRepository;
-        this.imagenRepository = imagenRepository;
-        this.categoriaRepository = categoriaRepository;
-        this.marcaRepository = marcaRepository;
-        this.amazonS3Service = amazonS3Service;
+        this.categoriaService = categoriaService;
+        this.marcaService = marcaService;
+        this.imagenService = imagenService;
         this.productoMapper = productoMapper;
     }
-
 
     @Override
     @Transactional(readOnly= true)
@@ -58,51 +55,41 @@ public class ProductoServiceImpl implements ProductoService {
 
         List<Producto> productos =  productoRepository.findAll();
 
-        // Obtener listado IDs de Marcas Categorias y Productos
-        List<Long> idsProducto  =  productos.stream().map(Producto :: getIdProducto)
-                .collect(Collectors.toList());
-        List<Long> idsCategoria = productos.stream().map(p -> p.getCategoria().getIdCategoria())
-                .distinct()
-                .collect(Collectors.toList());
-        List<Long>idsMarca= productos.stream().map(p -> p.getMarca().getIdMarca())
-                .distinct()
-                .collect(Collectors.toList());
+        // Obtener listado de IDs de productos, categorías y marcas
+        List<Long> idsProducto  =  productos.stream().map(Producto :: getIdProducto).collect(Collectors.toList());
+        List<Long> idsCategoria = productos.stream().map(p -> p.getCategoria().getIdCategoria()).distinct().collect(Collectors.toList());
+        List<Long>idsMarca= productos.stream().map(p -> p.getMarca().getIdMarca()).distinct().collect(Collectors.toList());
 
-        //Cargar imagenes en bloque de cada listado
-        Map<Long, List<Imagen>> imagenesPorProducto = cargarImagenesPorEntidad(TipoEntidad.PRODUCTO, idsProducto);
-        Map<Long, List<Imagen>> imagenesPorCategoria = cargarImagenesPorEntidad(TipoEntidad.CATEGORIA, idsCategoria);
-        Map<Long, List<Imagen>> imagenesPorMarca =  cargarImagenesPorEntidad(TipoEntidad.MARCA, idsMarca);
+        //Cargar imagenes en bloque pra cada entidad
+        Map<Long, List<Imagen>> imagenesProducto = imagenService.obtenerImagenesDeEntidades(TipoEntidad.PRODUCTO, idsProducto);
+        Map<Long, List<Imagen>> imagenesCategoria = imagenService.obtenerImagenesDeEntidades(TipoEntidad.CATEGORIA, idsCategoria);
+        Map<Long, List<Imagen>> imagenesMarca =  imagenService.obtenerImagenesDeEntidades(TipoEntidad.MARCA, idsMarca);
 
+        // Mapear productos a DTO incluyendo las imágenes
         return productos.stream()
-                .map( p -> productoMapper.mappearProductoDto(p, imagenesPorProducto,imagenesPorCategoria,imagenesPorMarca))
+                .map( p -> productoMapper.mappearProductoDto(p, imagenesProducto,imagenesCategoria,imagenesMarca))
                 .toList();
     }
-
 
     @Override
     @Transactional(readOnly= true)
     public Page<ProductoDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable) {
 
-        // Obtener la página de productos desde el el repocitorio
+        // Obtener página de usuarios desdel el repositorio
         Page<Producto> productosPage = productoRepository.findAll(pageable);
 
         // Extraer productos
         List<Producto> productos =  productosPage.getContent();
 
         // Obtener listado IDs de Marcas Categorias y Productos
-        List<Long> idsProducto  =  productos.stream().map(Producto :: getIdProducto)
-                .collect(Collectors.toList());
-        List<Long> idsCategoria = productos.stream().map(p -> p.getCategoria().getIdCategoria())
-                .distinct()
-                .collect(Collectors.toList());
-        List<Long>idsMarca= productos.stream().map(p -> p.getMarca().getIdMarca())
-                .distinct()
-                .collect(Collectors.toList());
+        List<Long> idsProducto  =  productos.stream().map(Producto :: getIdProducto).collect(Collectors.toList());
+        List<Long> idsCategoria = productos.stream().map(p -> p.getCategoria().getIdCategoria()).distinct().collect(Collectors.toList());
+        List<Long>idsMarca= productos.stream().map(p -> p.getMarca().getIdMarca()).distinct().collect(Collectors.toList());
 
         //Cargar imagenes en bloque de cada listado
-        Map<Long, List<Imagen>> imagenesPorProducto = cargarImagenesPorEntidad(TipoEntidad.PRODUCTO, idsProducto);
-        Map<Long, List<Imagen>> imagenesPorCategoria = cargarImagenesPorEntidad(TipoEntidad.CATEGORIA, idsCategoria);
-        Map<Long, List<Imagen>> imagenesPorMarca =  cargarImagenesPorEntidad(TipoEntidad.MARCA, idsMarca);
+        Map<Long, List<Imagen>> imagenesPorProducto = imagenService.obtenerImagenesDeEntidades(TipoEntidad.PRODUCTO, idsProducto);
+        Map<Long, List<Imagen>> imagenesPorCategoria = imagenService.obtenerImagenesDeEntidades(TipoEntidad.CATEGORIA, idsCategoria);
+        Map<Long, List<Imagen>> imagenesPorMarca =  imagenService.obtenerImagenesDeEntidades(TipoEntidad.MARCA, idsMarca);
 
         // Convertir los productos a DTO
 
@@ -114,25 +101,25 @@ public class ProductoServiceImpl implements ProductoService {
         return new PageImpl<>(productosDto, pageable ,productosPage.getTotalElements());
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public ProductoDto obtenerProductoConImagenes(Long idProducto) {
+
+        // Buscar productos por ID
         Producto producto= productoRepository.findById(idProducto)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
 
         Long idCategoria = producto.getCategoria().getIdCategoria();
         Long idMarca = producto.getMarca().getIdMarca();
 
-        // Crear mapas con  una sola entrada de una
-        Map<Long, List<Imagen>> imagenesPorProducto = Map.of(idProducto, cargarImagenes(TipoEntidad.PRODUCTO, idProducto));
-        Map<Long, List<Imagen>> imagenesPorCategoria = Map.of(idCategoria, cargarImagenes(TipoEntidad.CATEGORIA, idCategoria));
-        Map<Long, List<Imagen>> imagenesPorMarca = Map.of(idMarca, cargarImagenes(TipoEntidad.MARCA, idMarca));
+        // Crear mapas con  una sola entrada para obtener imagenes
+        Map<Long, List<Imagen>> imagenesPorProducto = Map.of(idProducto, imagenService.obtenerImagenesDeEntidad(TipoEntidad.PRODUCTO, idProducto));
+        Map<Long, List<Imagen>> imagenesPorCategoria = Map.of(idCategoria, imagenService.obtenerImagenesDeEntidad(TipoEntidad.CATEGORIA, idCategoria));
+        Map<Long, List<Imagen>> imagenesPorMarca = Map.of(idMarca, imagenService.obtenerImagenesDeEntidad(TipoEntidad.MARCA, idMarca));
 
-
+        // Mapear producto a DTO
         return productoMapper.mappearProductoDto(producto, imagenesPorProducto,imagenesPorCategoria, imagenesPorMarca );
     }
-
 
     @Override
     public List<Producto> buscarPorCodigoONombre(String query) {
@@ -144,55 +131,37 @@ public class ProductoServiceImpl implements ProductoService {
         // Busca coincidencia tanto por codigo como por nombre
 
         return productoRepository.findByCodigoProductoContainingIgnoreCaseOrNombreProductoContainingIgnoreCase(query, query);
-
     }
 
     @Override
     @Transactional
     public ProductoDto crearProductoConImagenes(ProductoCrearDto productocrearDto) throws IOException{
 
-        Categoria categoria = categoriaRepository.findById(productocrearDto.getIdCategoria())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria no encontrado"));
+        Categoria categoria = categoriaService.obtenerCategoriaPorId(productocrearDto.getIdCategoria());
+        Marca marca = marcaService.obtenerMarcaPorId(productocrearDto.getIdMarca());
 
-        Marca marca = marcaRepository.findById(productocrearDto.getIdMarca())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Marca no encontrada"));
+        // Genera código de producto
+        String prefijo = categoriaService.obtenerPrefijoCategoria(productocrearDto.getIdCategoria());
 
-        String prefijo = categoriaRepository.obtenerPrefijoPorId(productocrearDto.getIdCategoria());
-
-        if (prefijo == null){
-            prefijo = "GEN";
-        }
 
         // Numero correlativo
         Long cantidad  = productoRepository.contarPorCategoria(productocrearDto.getIdCategoria()) +1;
 
-
         // Formato del codigo
         String anioMes = YearMonth.now().toString().replace(".","");
         String codigoGenerado = String.format("PROD-%s-%s-%04d", prefijo, anioMes, cantidad);
-        System.out.println(codigoGenerado);
 
-
-        // Construir Producto
+        // Construir y guardar producto
         Producto producto = construirProductoDesdeDto(productocrearDto, categoria , marca , codigoGenerado);
         productoRepository.save(producto);
 
+        // Subir imagenes asociadas al producto
+        imagenService.subirImagenesPorEntidad(
+                productocrearDto.getImagenesProducto(),
+                TipoEntidad.PRODUCTO,
+                producto.getIdProducto());
 
-        // Obtener lalista de imagenes enviadas desde DTO
-        List<ImagenCrearDto> imagenes = productocrearDto.getImagenesProducto();
-
-        if (imagenes != null && !imagenes.isEmpty()  ){
-
-            for(ImagenCrearDto imagenDto : imagenes){
-
-                amazonS3Service.subirArchivo(imagenDto.getArchivo(),imagenDto.getTipo(), producto.getIdProducto());
-            }
-
-        }
-         else{
-             System.out.println("Imagen no recibida");
-                 }
-
+        // Retonar producto con imágenes
         return obtenerProductoConImagenes(producto.getIdProducto());
 
     }
@@ -201,87 +170,45 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional
     public ProductoDto actualizaProducto(Long idProducto, ProductoActualizarDto productoActualizarDto) throws IOException {
 
+        // Buscar producto existentes
         Producto producto = productoRepository.findById(idProducto)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
 
+        // Buscar categoria y marca nueva
+        Categoria categoria = categoriaService.obtenerCategoriaPorId(productoActualizarDto.getIdCategoria());
 
-        Categoria categoria = categoriaRepository.findById(productoActualizarDto.getIdCategoria())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria no encontrado"));
-
-        Marca marca = marcaRepository.findById(productoActualizarDto.getIdMarca())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Marca no encontrada"));
+        Marca marca = marcaService.obtenerMarcaPorId(productoActualizarDto.getIdMarca());
 
         // Actualiza  datos del producto
         actualizarProductoDesdeDto(producto, productoActualizarDto, categoria, marca );
 
         productoRepository.save(producto);
 
+        // Convertir a DTO y retonar
         return  convertirADto(producto);
-
-    }
-
-    @Override
-    @Transactional
-    public List<Producto> obtenerProductosPorCategoria(Long idCategoria) {
-
-        if (!categoriaRepository.existsById(idCategoria)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Categoria no encontrada");
-        }
-
-        List<Producto> productos = productoRepository.findByCategoria_IdCategoria(idCategoria);
-        productos.forEach(this::cargarImagenesParaProducto);
-
-        return productos;
-    }
-
-    @Override
-    @Transactional
-    public List<Producto> obtenerProductosPorMarca(Long idMarca) {
-
-        if (!marcaRepository.existsById(idMarca)){
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Marca No encontrada");
-        }
-
-        List<Producto> productos = productoRepository.findByMarca_IdMarca(idMarca);
-        productos.forEach(this::cargarImagenesParaProducto);
-
-        return productos;
     }
 
     @Override
     @Transactional
     public void eliminarProducto(Long idProducto) {
 
+        // Verificar existencia del producto
         if(!productoRepository.existsById(idProducto)){
             throw new EntityNotFoundException("Producto no encontrado para eliminar");
         }
 
-        // Eliminar imagenes asociadas
-
-        amazonS3Service.eliminarArchivoPorEntidad(
-                TipoEntidad.PRODUCTO,
-                idProducto
+        // Eliminar imagenes asociadas ates de borrar el producto
+        imagenService.eliminarImagenesPorEntidad(
+                TipoEntidad.PRODUCTO,idProducto
         );
 
+        // Eliminar producto
         productoRepository.deleteById(idProducto);
 
     }
 
     //=================================== Metodos auxiliares==============================
 
-    //Carga imagenes de un tipo de entidad
-    private List<Imagen> cargarImagenes(TipoEntidad tipoEntidad , Long idEntidad){
-        return imagenRepository.findByTipoAndIdEntidad(tipoEntidad, idEntidad);
-
-    }
-
-    //Carga imagenes de un tipo de entidades
-    private Map<Long,List<Imagen>>  cargarImagenesPorEntidad(TipoEntidad tipoEntidad, List<Long> ids) {
-        return imagenRepository.findByTipoAndIdEntidadIn(tipoEntidad, ids).stream()
-                .collect(Collectors.groupingBy(Imagen::getIdEntidad));
-
-    }
 
     //Construir  Producto desde Dto
     private Producto construirProductoDesdeDto(ProductoCrearDto productoDto, Categoria categoria, Marca marca, String codigoGenerado) {
@@ -300,21 +227,7 @@ public class ProductoServiceImpl implements ProductoService {
         return producto;
     }
 
-
-    private void cargarImagenesParaProducto(Producto producto){
-
-        producto.setImagenes(cargarImagenes(TipoEntidad.PRODUCTO, producto.getIdProducto()));
-
-        if (producto.getCategoria() != null){
-            producto.getCategoria().setImagenes(cargarImagenes(TipoEntidad.CATEGORIA, producto.getCategoria().getIdCategoria()));
-        }
-
-        if(producto.getMarca() != null){
-            producto.getMarca().setImagenes(cargarImagenes(TipoEntidad.MARCA, producto.getMarca().getIdMarca()));
-        }
-
-    }
-
+    // Actualizar producto existente dese DTO
     private void actualizarProductoDesdeDto(Producto producto, ProductoActualizarDto productoActualizarDto, Categoria categoria, Marca marca) {
 
         if (productoActualizarDto.getNombreProducto() != null){
@@ -338,10 +251,11 @@ public class ProductoServiceImpl implements ProductoService {
         }
 
 
+        // Actualizar fecha de modificación
         producto.setFechaActualizacion(LocalDateTime.now());
     }
 
-
+    // Convertir entidad Producto a Dto
     private ProductoDto convertirADto(Producto producto) {
 
         ProductoDto productoDto = new ProductoDto();
@@ -362,7 +276,36 @@ public class ProductoServiceImpl implements ProductoService {
         productoDto.setNombreMarca(producto.getMarca().getNombreMarca());
 
         return productoDto;
-
     }
+
+
+    //    @Override
+//    @Transactional
+//    public List<Producto> obtenerProductosPorCategoria(Long idCategoria) {
+//
+//        if (!categoriaRepository.existsById(idCategoria)){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Categoria no encontrada");
+//        }
+//
+//        List<Producto> productos = productoRepository.findByCategoria_IdCategoria(idCategoria);
+//        productos.forEach(this::cargarImagenesParaProducto);
+//
+//        return productos;
+//   }
+//
+//    @Override
+//    @Transactional
+//    public List<Producto> obtenerProductosPorMarca(Long idMarca) {
+//
+//        if (!marcaRepository.existsById(idMarca)){
+//
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Marca No encontrada");
+//        }
+//
+//        List<Producto> productos = productoRepository.findByMarca_IdMarca(idMarca);
+//        productos.forEach(this::cargarImagenesParaProducto);
+//
+//        return productos;
+//    }
 
 }

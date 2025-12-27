@@ -4,6 +4,8 @@ import com.development.ecommerce_tecnology.dto.UsuarioCrearDto;
 import com.development.ecommerce_tecnology.dto.UsuarioDto;
 import com.development.ecommerce_tecnology.dto.UsuarioPersonaCrearDto;
 import com.development.ecommerce_tecnology.dto.UsuarioPersonaDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,9 +16,9 @@ public interface UsuarioService {
 
 
     UsuarioDto obtenerUsuarioConImagen(Long idUsuario);
-    List<UsuarioDto> obtenerTodosUsuariosConImagen();
+    Page<UsuarioDto> obtenerTodosUsuariosConImagen(Pageable pageable);
     UsuarioPersonaDto obtenerUsuarioPersonaConImagen(Long idUsuario);
-    List<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagen();
+    Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagen(Pageable pageable);
     UsuarioDto crearUsuarioConImagen(UsuarioCrearDto usuarioDto) throws IOException;
     UsuarioPersonaDto crearUsuarioPersonaConImagen(UsuarioPersonaCrearDto usuarioDto) throws IOException;
 

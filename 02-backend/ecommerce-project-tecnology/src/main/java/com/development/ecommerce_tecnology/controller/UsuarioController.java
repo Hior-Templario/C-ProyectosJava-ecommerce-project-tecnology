@@ -5,6 +5,10 @@ import com.development.ecommerce_tecnology.entity.EstadoUsuario;
 import com.development.ecommerce_tecnology.enums.TipoEntidad;
 import com.development.ecommerce_tecnology.service.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +31,32 @@ public class UsuarioController {
         this.usuarioService =usuarioService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<UsuarioDto>>obtenerTodos(){
-        return ResponseEntity.ok(usuarioService.obtenerTodosUsuariosConImagen());
+//    @GetMapping
+//    public ResponseEntity<List<UsuarioDto>>obtenerTodos(){
+//        return ResponseEntity.ok(usuarioService.obtenerTodosUsuariosConImagen());
+//    }
+
+
+    @GetMapping("/usuariosPaginados")
+    public ResponseEntity<Page<UsuarioDto>>listarUsuariossPaginados(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size){
+
+        Pageable pageable = PageRequest.of(page, size , Sort.by("nombreUsuario").ascending());
+        Page<UsuarioDto>usuarios= usuarioService.obtenerTodosUsuariosConImagen(pageable);
+
+        return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/personas")
-    public ResponseEntity<List<UsuarioPersonaDto>>obtenerTodasPersonas(){
-        return ResponseEntity.ok(usuarioService.obtenerTodosUsuariosPersonasConImagen());
+
+    @GetMapping("/usuariosPersonasPaginados")
+    public ResponseEntity<Page<UsuarioPersonaDto>>obtenerTodasPersonas(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size){
+            Pageable pageable = PageRequest.of(page, size , Sort.by("nombreUsuario").ascending());
+            Page<UsuarioPersonaDto>usuariosPersonas= usuarioService.obtenerTodosUsuariosPersonasConImagen(pageable);
+
+            return ResponseEntity.ok(usuariosPersonas);
     }
 
     @GetMapping("/perfilUsuario/{idUsuario}")

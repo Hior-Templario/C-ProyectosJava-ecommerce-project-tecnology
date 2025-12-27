@@ -7,6 +7,9 @@ import com.development.ecommerce_tecnology.enums.TipoEntidad;
 import com.development.ecommerce_tecnology.mapper.UsuarioMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,19 +35,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final RolRepository rolRepository;
     private final EstadoUsuarioRepository estadoUsuarioRepository;
     private final PersonaRepository personaRepository;
-    private final ImagenRepository imagenRepository;
+    private final ImagenService imagenService;
     private final UsuarioMapper usuarioMapper;
     private final AmazonS3Service amazonS3Service;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // Constructor para inyectar dependencias
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository, EstadoUsuarioRepository estadoUsuarioRepository, PersonaRepository personaRepository, ImagenRepository imagenRepository, UsuarioMapper usuarioMapper, AmazonS3Service amazonS3Service) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository, EstadoUsuarioRepository estadoUsuarioRepository, PersonaRepository personaRepository, ImagenService imagenService, UsuarioMapper usuarioMapper, AmazonS3Service amazonS3Service) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.estadoUsuarioRepository = estadoUsuarioRepository;
         this.personaRepository = personaRepository;
-
-        this.imagenRepository = imagenRepository;
+        this.imagenService = imagenService;
         this.usuarioMapper = usuarioMapper;
         this.amazonS3Service = amazonS3Service;
     }
@@ -62,11 +64,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         Long idRol = usuario.getRol().getIdRol();
 
         // Cargar la imagen asociada al usuario
-        Imagen imagen = cargarImagen(TipoEntidad.USUARIO, idUsuario);
+        Imagen imagen = imagenService.obtenerImagenPrincipalPorEntidad(TipoEntidad.USUARIO, idUsuario);
         Map<Long, Imagen> imagenDeUsuario = new HashMap<>();
 
-        // Si hay imagen, se asocia al mapa con el Id del usuario
-        if (imagen != null){
+        if (imagen != null) {
             imagenDeUsuario.put(idUsuario, imagen);
         }
 
@@ -82,11 +83,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario= usuarioRepository.findById(idUsuario)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        // Obtener el ID del rol de usuario
-        Long idRol = usuario.getRol().getIdRol();
 
         // Cargar la imagen asociada al usuario
-        Imagen imagen = cargarImagen(TipoEntidad.USUARIO, idUsuario);
+        Imagen imagen = imagenService.obtenerImagenPrincipalPorEntidad(TipoEntidad.USUARIO, idUsuario);
+
+
         Map<Long, Imagen> imagenDeUsuario = new HashMap<>();
 
         // Cargar la persona asociada al usuario
@@ -102,36 +103,73 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
-    // Método para obtener todos los usuarios con imagens
+    // Método para obtener todos los usuarios con imagenes
     @Override
-    public List<UsuarioDto> obtenerTodosUsuariosConImagen() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        Map<Long, Imagen> imagenesPorUsuario = new HashMap<>();
+    public Page<UsuarioDto> obtenerTodosUsuariosConImagen(Pageable pageable) {
 
-        for(Usuario usuario: usuarios){
-            Imagen imagen = cargarImagen(TipoEntidad.USUARIO, usuario.getIdUsuario());
-            if (imagen != null){
-                imagenesPorUsuario.put(usuario.getIdUsuario(),imagen);
-            }
-        }
+        // Obtener página de usuarios desdel el repositorio
+        Page<Usuario> usuarioPage = usuarioRepository.findAll(pageable);
 
-        return usuarios.stream()
-                .map(u-> usuarioMapper.mappearUsuarioDto(u, imagenesPorUsuario)).collect(Collectors.toList());
+        // Extraer usuarios
+        List<Usuario> usuarios = usuarioPage.getContent();
+
+        // Obtener listado IDs de Usuarios
+        List<Long> idsUsuario =  usuarios.stream().map(Usuario :: getIdUsuario).toList();
+
+        // Cargar imagenes
+        Map<Long, List<Imagen>> imagenesPorUsuario =
+                imagenService.obtenerImagenesDeEntidades(TipoEntidad.USUARIO, idsUsuario);
+
+        // Adaptar a una imagen por usuario
+        Map<Long, Imagen> imagenUnicaPorUsuario = imagenesPorUsuario.entrySet()
+                .stream()
+                .filter(e -> !e.getValue().isEmpty())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e->e.getValue().get(0)
+                ));
+
+        //Mappear a DTO
+        List<UsuarioDto> usuariosDto = usuarios.stream()
+                .map(u-> usuarioMapper.mappearUsuarioDto(u, imagenUnicaPorUsuario))
+                .toList();
+
+        return new PageImpl<>(usuariosDto, pageable,usuarioPage.getTotalElements());
     }
 
-    @Override
-    public List<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagen() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        Map<Long, Imagen> imagenesPorUsuario = new HashMap<>();
 
-        for(Usuario usuario: usuarios){
-            Imagen imagen = cargarImagen(TipoEntidad.USUARIO, usuario.getIdUsuario());
-            if (imagen != null){
-                imagenesPorUsuario.put(usuario.getIdUsuario(),imagen);
-            }
-        }
-        return usuarios.stream()
-                .map(u-> usuarioMapper.mappearUsuarioPersonaDto(u, imagenesPorUsuario)).collect(Collectors.toList());
+    @Override
+    public Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagen(Pageable pageable) {
+
+        // Obtener página de usuarios desdel el repositorio
+        Page<Usuario> usuarioPersonaPage = usuarioRepository.findAll(pageable);
+
+        // Extraer usuarios
+        List<Usuario> usuariosPersonas = usuarioPersonaPage.getContent();
+
+        // Obtener listado IDs de Usuarios
+        List<Long> idsUsuario =  usuariosPersonas.stream().map(Usuario :: getIdUsuario).toList();
+
+        // Cargar imagenes
+        Map<Long, List<Imagen>> imagenesPorUsuario =
+                imagenService.obtenerImagenesDeEntidades(TipoEntidad.USUARIO, idsUsuario);
+
+        // Adaptar a una imagen por usuario
+        Map<Long, Imagen> imagenUnicaPorUsuario = imagenesPorUsuario.entrySet()
+                .stream()
+                .filter(e -> !e.getValue().isEmpty())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e->e.getValue().get(0)
+                ));
+
+        //Mappear a DTO
+        List<UsuarioPersonaDto> usuariosPersonasDto = usuariosPersonas.stream()
+                .map(u-> usuarioMapper.mappearUsuarioPersonaDto(u, imagenUnicaPorUsuario))
+                .toList();
+
+
+        return new PageImpl<>(usuariosPersonasDto, pageable,usuarioPersonaPage.getTotalElements());
     }
 
 
@@ -154,29 +192,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = construirUsuarioDesdeDto(usuarioCrearDto ,rol ,estadoUsuario);
         usuarioRepository.save(usuario);
 
-            // Obtener la imagen enviada desde DTO
-            ImagenCrearDto img = usuarioCrearDto.getImagenUsuario();
-            logger.info("Llego imagen?:" + img);
-
-
-                // Validar si hay archivo de imagen válido
-                if (img !=null && img.getArchivo() != null && !img.getArchivo().isEmpty()) {
-                    logger.info("Imagen Recibida");
-
-                    // Generar nombre Unico para el archivo
-                    String nombreArchivo = UUID.randomUUID() + "_" + img.getArchivo().getOriginalFilename();
-                   if (img.getTipo() != TipoEntidad.USUARIO){
-                       throw  new IllegalArgumentException("Solo se permite imagen tipo Usuario");
-                   }
-
-                    Long idEntidad= usuario.getIdUsuario();
-                    // Subir archivo a Amazon S3
-                    //amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
-
-                }
-                else {
-                    System.out.println("Imagen No Recibida");
-                }
+        // subir imagen asociada a usuario
+        imagenService.subirImagenPorEntidad(
+                usuarioCrearDto.getImagenUsuario(),
+                TipoEntidad.USUARIO,
+                usuario.getIdUsuario()
+        );
         // Retornar DTO con información completa del usuario, incluyendo imagen
         return obtenerUsuarioConImagen(usuario.getIdUsuario());
     }
@@ -218,7 +239,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
                     Long idEntidad= usuario.getIdUsuario();
                     // Subir archivo a Amazon S3
-//amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
+                      //amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
 
                 }
                 else {
@@ -259,7 +280,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         EstadoUsuario estado = estadoUsuarioRepository.findById(usuarioPersonaDto.getIdEstado())
                 .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
 
-        usuario.setEstadoUsuario(estadoUsuario);
+        usuario.setEstadoUsuario(estado);
 
 
         Persona persona = new Persona();
@@ -281,19 +302,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuario;
     }
 
-    // Método auxiliar para cargar  la imagen asociadad a un tipo entidad
-    private Imagen cargarImagen(TipoEntidad tipoEntidad, Long idEntidad){
-        return imagenRepository.findFirstByTipoAndIdEntidad(tipoEntidad, idEntidad);
-    }
-
-
-
-    //Carga imagenes de un tipo de entidades
-    private Map<Long,List<Imagen>>  cargarImagenesPorEntidad(TipoEntidad tipoEntidad, List<Long> ids) {
-        return imagenRepository.findByTipoAndIdEntidadIn(tipoEntidad, ids).stream()
-                .collect(Collectors.groupingBy(Imagen::getIdEntidad));
-
-    }
 }
 
 

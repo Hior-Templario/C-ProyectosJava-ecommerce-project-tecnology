@@ -39,7 +39,7 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.obtenerTodosProductosConImagenes());
     }
 
-    @GetMapping("paginados")
+    @GetMapping("/gitproductosPaginados")
     public ResponseEntity<Page<ProductoDto>>listarProductosPaginados(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size)
@@ -56,10 +56,10 @@ public class ProductoController {
 
     }
 
-    @GetMapping("/categoria/{idCategoria}")
-    public ResponseEntity<List<Producto>> obtenerProductosPorCategoria(@PathVariable Long idCategoria){
-        return ResponseEntity.ok(productoService.obtenerProductosPorCategoria(idCategoria));
-    }
+//    @GetMapping("/categoria/{idCategoria}")
+//    public ResponseEntity<List<Producto>> obtenerProductosPorCategoria(@PathVariable Long idCategoria){
+//        return ResponseEntity.ok(productoService.obtenerProductosPorCategoria(idCategoria));
+//    }
 
     @GetMapping("/buscar")
     public ResponseEntity<List<Producto>> buscarProductos(@RequestParam("q") String query){
@@ -67,10 +67,10 @@ public class ProductoController {
         return ResponseEntity.ok(resultados);
     }
 
-    @GetMapping("/marca/{idMarca}")
-    public ResponseEntity<List<Producto>> obtenerProductosPorMarca(@PathVariable Long idMarca){
-        return ResponseEntity.ok(productoService.obtenerProductosPorMarca(idMarca));
-    }
+//    @GetMapping("/marca/{idMarca}")
+//    public ResponseEntity<List<Producto>> obtenerProductosPorMarca(@PathVariable Long idMarca){
+//        return ResponseEntity.ok(productoService.obtenerProductosPorMarca(idMarca));
+//    }
 
     @PostMapping(value= "/crearProducto" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public  ResponseEntity<ProductoDto> crearProducto(
