@@ -39,7 +39,7 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.obtenerTodosProductosConImagenes());
     }
 
-    @GetMapping("/gitproductosPaginados")
+    @GetMapping("/productosPaginados")
     public ResponseEntity<Page<ProductoDto>>listarProductosPaginados(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size)

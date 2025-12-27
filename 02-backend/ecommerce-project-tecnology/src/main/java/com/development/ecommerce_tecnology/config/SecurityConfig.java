@@ -51,8 +51,20 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Permite el acceso sin autenticaaciòn a la pagina inicio, login,css,js
                         .requestMatchers(
-                                "/", "/api/login","/css/**","/js/**","/api/productos/**","/api/usuarios/**","/api/categorias/**", "/api/marcas/**", "/api/estadosUsuario/**",
-                                "/api/movimientoInventario/**" , "/api/registrarMovimiento/**", "/api/crear/**" , "/api/roles/**" , "/api/imagenes/**"
+                                "/",
+                                "/api/login",
+                                "/api/productos/**",
+                                "/api/usuarios/**",
+                                "/api/categorias/**",
+                                "/api/marcas/**",
+                                "/api/estadosUsuario/**",
+                                "/api/movimientoInventario/**",
+                                "/api/registrarMovimiento/**",
+                                "/api/crear/**",
+                                "/api/roles/**",
+                                "/api/imagenes/**",
+                                "/css/**",
+                                "/js/**"
                         ).permitAll()
                         // Solo permite acceso a la lista de usuarios a SOPORTE Y ADMIN
                         .requestMatchers("/usuarios").hasAnyRole("ADMIN","SOPORTE")
@@ -76,16 +88,14 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(false);
-        config.setAllowedOriginPatterns(List.of(
+        config.setAllowedOrigins(List.of(
                 "http://localhost:4200",
-                "https://proyectos-angular-ecommerce-project.vercel.app",
-                "https://*.vercel.app"
+                "https://proyectos-angular-ecommerce-project.vercel.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",config);
