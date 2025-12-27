@@ -1,0 +1,17 @@
+<div>
+
+    <div class="imagenesCarga">
+
+        <input 
+        type="file"
+        multiple
+        (change)="onFileSelected($event)">
+
+        <button  
+        class="btn btn-warning mt-2"
+        [disabled]="archivosSeleccionados.length === 0"
+        (click)="RemplazarImagenes()">
+        Guardar archivos
+        </button>
+
+</div>

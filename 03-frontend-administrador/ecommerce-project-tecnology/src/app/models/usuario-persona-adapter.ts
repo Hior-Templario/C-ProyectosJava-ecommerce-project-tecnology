@@ -17,7 +17,7 @@ export class UsuarioPersonaAdapter implements Adapter<Usuario> {
             fechaRegistro: item.fechaRegistro,
             imagenUsuario: item.imagenUsuario,
             persona: {
-                idpersona: item.idpersona,
+                idPersona: item.idPersona,
                 nombresPersona: item.nombresPersona,
                 apellidosPersona: item.apellidosPersona,
                 tipoDocumento: item.tipoDocumento,

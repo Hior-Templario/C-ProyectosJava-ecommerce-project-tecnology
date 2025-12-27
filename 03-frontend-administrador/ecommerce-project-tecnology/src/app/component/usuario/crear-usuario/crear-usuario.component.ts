@@ -18,7 +18,7 @@ export class CrearUsuarioComponent implements OnInit {
 
   formUsuarioPersona!: FormGroup;
   roles: any[] = [];
-  estados: any[] = [];
+  estadosUsuario: any[] = [];
 
   archivoSeleccionado: File | null= null;
 
@@ -124,7 +124,7 @@ export class CrearUsuarioComponent implements OnInit {
 
   private cargarEstadoUsuario(): void {
     this.estadoUsuarioService.obtenerEstadosUsuario().subscribe(data => {
-      this.estados = data;
+      this.estadosUsuario = data;
     }
 
     )

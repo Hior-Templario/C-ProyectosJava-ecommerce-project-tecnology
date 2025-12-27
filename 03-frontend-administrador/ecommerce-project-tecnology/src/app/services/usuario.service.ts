@@ -5,6 +5,7 @@ import { map, Observable } from "rxjs";
 import { Usuario } from "../models/usuario";
 import { UsuarioPersonaAdapter } from "../models/usuario-persona-adapter";
 import { environment } from "../../environments/enviroment";
+import { UsuarioActualizacion } from "../models/usuarioActualizacion";
 
 
 
@@ -20,14 +21,20 @@ export class UsuarioService{
 
     // inyeccion del servicio HttpClient para poder realizar peticiones HTTP
     constructor ( private http:HttpClient,
-        private adapter: UsuarioPersonaAdapter
+                  public adapter: UsuarioPersonaAdapter
     ){}
 
+    
     // Mètodo para obtener todos los usuarios del backend
     obtenerUsuarios(): Observable<Usuario[]>{
        return this.http.get<any[]>(this.apiUrl).pipe(
             map(data => data.map(item => this.adapter.adapt(item)))
         )
+    }
+
+    // Metodo para obtener todos los usuarios paginados del backend
+    obtenerUsuariosPersonasPaginados(page: number = 0, size: number = 20): Observable<any> {
+    return this.http.get(`${this.apiUrl}/usuariosPersonasPaginados?page=${page}&size=${size}`)
     }
        
     // Metodo para obtener usuario
@@ -52,6 +59,13 @@ export class UsuarioService{
     crearUsuario(usuario: any): Observable<any>{
       return this.http.post<Usuario>(`${this.apiUrl}/crearUsuarioPersona`,usuario);
     }
+
+    // Metodo para actualizar producto
+    actualizarUsuario(idUsuario: number, usuarioActualizacion: UsuarioActualizacion): Observable<Usuario>{
+      return this.http.patch<Usuario>(`${this.apiUrl}/actualizarUsuario/${idUsuario}`, usuarioActualizacion);
+
+    } 
+
 
 
 

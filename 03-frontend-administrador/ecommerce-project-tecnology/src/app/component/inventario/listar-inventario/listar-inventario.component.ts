@@ -9,8 +9,6 @@ import { Categoria } from "../../../models/categoria";
 import { Marca } from "../../../models/marca";
 
 // Importacion de servicios
-import { CategoriaService } from "../../../services/categoria.service";
-import { MarcaService } from "../../../services/marca.service";
 import { ProductoService } from "../../../services/producto.service";
 import { RouterModule } from "@angular/router";
 

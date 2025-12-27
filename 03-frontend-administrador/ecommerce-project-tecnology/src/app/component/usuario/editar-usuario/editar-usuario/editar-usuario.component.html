@@ -1,9 +1,9 @@
-<form [formGroup]="formUsuarioPersona" (ngSubmit)="onSubmit()" class="formulario">
+<form [formGroup]="formUsuarioPersona" (ngSubmit)="actualizarUsuario()" class="formulario">
 
 
     <fieldset class="form-fieldset">
 
-        <legend class="form-legend">  Registrar usuario</legend>
+        <legend class="form-legend">  MODIFICAR INFORMACIÓN DEL USUARIO</legend>
 
         <!-- ID Producto (oculto solo para edicions)-->
 
@@ -27,67 +27,35 @@
 
         </div>
 
-        <div class="row">
 
-            <!-- contraseña -->
-            <div class="formulario-col">
-                <label for="contrasenia">Contraseña</label>
-                <input id="contrasenia" class="form-control" formControlName="contrasenia" type="password"
-                    placeholder="Ingrese nueva contraseña">
-            </div>
-
-        </div>
-
-        <div class="row">
-            <!-- Campo foto de perfil -->
-             <div class="formulario-col">
-                <label for="archivo"> Foto de perfil</label>
-                 <input id="archivo" type="file" class="form-control"
-                (change)="onFileSelected($event)" accept="image/*">
-             </div>
-        </div>
-
-        <div class="row">
-
-            <!-- Fechas ocultas -->
-            <input type="hidden" formControlName="fechaRegistro">
-
-        </div>
-        <div class="row">
-            <!-- Rol -->
-            <div class="formulario-col">
+        <div>
                 <label for="idRol">Rol</label>
-                <select id="idRol" class="form-select" formControlName="idRol">
-                    <option value=""> seleccione un rol</option>
-                    <option *ngFor="let rol of roles" [value]="rol.idRol">{{rol.nombreRol}}
-                    </option>
-                </select>
-            </div>
-
-            <!-- Marca -->
-            <div class="formulario-col">
-                <label for="idEstado">Estado del usuario</label>
-                <select id="idEstado" class="form-select" formControlName="idEstado">
-                    <option value=""> seleccione una estado</option>
-                    <option *ngFor="let est of estadosUsuario" [value]="est.idEstado">{{est.nombreEstado}}
-                    </option>
-                </select>
-            </div>
-
+                <input id="idRol" class="form-control" formControlName="idRol" type="number">
         </div>
+
+        
+        <div>
+                <label for="idEstado">idEstado</label>
+                <input id="idEstado" class="form-control" formControlName="idEstado" type="number">
+        </div>
+
+           
+
+
 
     </fieldset>
 
+
+<div formGroupName="persona">
 
     <fieldset class="form-fieldset mt-3">
 
         <legend class="form-legend"> Datos personales</legend>
         <!-- DATOS PERSONALES -->
 
-
-
-
         <div class="row">
+
+            <input type="hidden" formControlName="idPersona">
 
             <!-- Nombre persona -->
 
@@ -207,5 +175,7 @@
         </div>
 
     </fieldset>
+
+    </div>
 
 </form>

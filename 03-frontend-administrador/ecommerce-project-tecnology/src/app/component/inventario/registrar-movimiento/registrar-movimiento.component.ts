@@ -32,13 +32,13 @@ export class RegistrarMovimientoComponent implements OnInit{
 
 
   ngOnInit(): void {
-   this.inicializarFormn();
+   this.inicializarForm();
    this.configurarAutocompletado();
   }
 
 
   
-  private inicializarFormn(): void{
+  private inicializarForm(): void{
 
     console.log("Pagina abierta");
 

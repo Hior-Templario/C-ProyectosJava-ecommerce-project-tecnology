@@ -15,6 +15,8 @@ import { ListaMarcaComponent } from './component/marca/lista-marca/lista-marca.c
 import { DetallesMarcaComponent } from './component/marca/detalles-marca/detalles-marca.component';
 import { RegistrarMovimientoComponent } from './component/inventario/registrar-movimiento/registrar-movimiento.component';
 import { ListarInventarioComponent } from './component/inventario/listar-inventario/listar-inventario.component';
+import { EditarProductoComponent } from './component/producto/editar-producto/editar-producto.component';
+import { EditarUsuarioComponent } from './component/usuario/editar-usuario/editar-usuario/editar-usuario.component';
 
 export const routes: Routes = [
     {   path: 'dashboard', component: DashboardComponent },
@@ -22,6 +24,8 @@ export const routes: Routes = [
     {   path: 'listaProductos', component: ListaProductoComponent }, 
 
     {   path: 'agregarProducto',  component: AgregarProductoComponent},
+
+    {   path: 'modificarProducto/:idProducto', component: EditarProductoComponent},
 
     {   path: 'detallesProducto/:idProducto', component: DetallesProductoComponent},
 
@@ -42,6 +46,8 @@ export const routes: Routes = [
     {   path: 'listaUsuarios', component: ListaUsuariosComponent },
     
     {   path: 'crearUsuarios',  component: CrearUsuarioComponent},
+
+    {   path: 'modificarUsuario/:idUsuario', component: EditarUsuarioComponent},
 
     {   path: 'login', component: LoginComponent}, 
     

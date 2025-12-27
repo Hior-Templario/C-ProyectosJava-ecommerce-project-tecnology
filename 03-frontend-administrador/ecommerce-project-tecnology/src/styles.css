@@ -33,22 +33,38 @@
    Estilos de la barra superior
    ============================ */
 
-.header-menu{
-    background-color:  #011126 ; /* Define el color de fondo azul obcuro  para la barra superior*/
-    display: flex; /*Aplica flexbox para organizar los elementos dentro de la barra*/
-    justify-content: space-between;/* Distribuye el espacio entre los elementos al máximo posible*/
-    align-items: center; /* Centra verticalmente los elementos*/
-}
+.banner {
+width: 100vw; /* ocupa todo ell ancho de la pantalla*/
+background-color:  #011126 ;
+display: flex; /*Aplica flexbox para organizar los elementos dentro de la barra*/
+align-items: center; /* Centra verticalmente los elementos*/
+justify-content: space-between; /* logo a la izquierda, sesión a la derecha*/
+padding: 0 30px;
+color: #c8e2fd;
+
+   }
+
+.logo{
+
+    width: 12vw;
+    max-width: 200px;
+    min-width: 120px;
+    height:auto;
+
+   }
 
 /* ============================
    Contenedor de sesión
    ============================ */
 
 .sesion{
+
 display: flex; /*Aplica flexbox para colocar los botones en fila*/
-gap: 20px; /* Define un espacio de 20 px entre los botones*/
+gap: 15px; /* Define un espacio de 15 px entre los botones*/
+align-items: center;
 
 }
+
 
 .btn-fijo-sesion{
     min-width: 140px;
@@ -112,11 +128,17 @@ gap: 20px; /* Define un espacio de 20 px entre los botones*/
 }
 
 .detalles-imagen{
-    width: 120px;
+
+    width: auto;
     height: 120px;
     border-radius: 10%;
     object-fit: cover;
     border: 2px solid #007bff; 
+}
+
+.detalles-imagen-grande{
+    width: 480px;
+    height: auto;
 }
 
 .detalles-principales{
@@ -266,14 +288,20 @@ th, td{
 
 .formulario {
     border: 1px solid hsl(213, 87%, 63%) ;
-    max-width: 1200px;
-    width: 900px;
+    max-width: 1000px; /* limite en pantallas grandes*/
+    width: auto; /* Se adapta al ancho disponible*/     
     margin: 0 auto;
-    padding: 25px;
+    padding: 20px;
     background-color: #f9f9fa;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
     
+}
+
+.formulario row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
 
@@ -286,6 +314,7 @@ th, td{
 /*Input*/
 .formulario input,
 .formulario select {
+    border-color: hsl(213, 87%, 63%) ;
     margin-bottom: 3px;
 }
 
@@ -394,7 +423,7 @@ li a.no-underline{
     font-size: 14px;
     margin-right: 10px;
     border-radius: 5px;
-    padding: 1px;
+    padding: 5px;
 }
 
 

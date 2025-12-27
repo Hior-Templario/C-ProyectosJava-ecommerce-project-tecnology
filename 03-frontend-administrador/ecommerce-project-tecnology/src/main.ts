@@ -19,12 +19,15 @@ import { DetallesMarcaComponent } from "./app/component/marca/detalles-marca/det
 import { RegistrarMovimientoComponent } from "./app/component/inventario/registrar-movimiento/registrar-movimiento.component";
 import { ListarInventarioComponent } from "./app/component/inventario/listar-inventario/listar-inventario.component";
 import { provideAnimations } from "@angular/platform-browser/animations";
+import { EditarProductoComponent } from "./app/component/producto/editar-producto/editar-producto.component";
+import { EditarUsuarioComponent } from "./app/component/usuario/editar-usuario/editar-usuario/editar-usuario.component";
 
 const routes: Routes = [ // Se definen las rutas disponibles en la app.
 
 {   path: 'dashboard', component: DashboardComponent },
 {   path: 'listaProductos', component: ListaProductoComponent }, 
 {   path: 'agregarProducto',  component: AgregarProductoComponent},
+{   path: 'modificarProducto/:idProducto', component: EditarProductoComponent},
 {   path: 'detallesProducto/:idProducto', component: DetallesProductoComponent},
 {   path: 'listarInventario', component: ListarInventarioComponent }, 
 {   path: 'listaCategorias', component: ListaCategoriaComponent }, // Ruta ' /categorias' muestra listaCategoriaComponent
@@ -35,6 +38,7 @@ const routes: Routes = [ // Se definen las rutas disponibles en la app.
 {   path: 'detallesMarca/:idMarca', component: DetallesMarcaComponent},
 {   path: 'listaUsuarios', component: ListaUsuariosComponent }, // Ruta ' /usuarios' muestra listaCategoriaComponent
 {   path: 'crearUsuarios',  component: CrearUsuarioComponent},
+{   path: 'modificarUsuario/:idUsuario', component: EditarUsuarioComponent},
 {   path: 'productos',  component: LoginComponent}, 
 {   path: 'login', component: LoginComponent}, 
 {   path: 'perfilUsuario/:idUsuario', component: PerfilUsuarioComponent}, 

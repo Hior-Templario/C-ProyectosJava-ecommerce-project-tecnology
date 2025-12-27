@@ -1,5 +1,4 @@
 
-
 <div class="tabla-encabezado">
     <h2>LISTADO DE USUARIO</h2>
     <button class="btn btn-primary btn-fijo btn-crear"
@@ -12,7 +11,7 @@
 
     <thead>
 
-        <th>Usuario</th>
+        <th>Nombre Usuario</th>
         <th>Nombre Completo</th>
         <th>Correo</th>
         <th>Fecha Registro</th>
@@ -28,7 +27,7 @@
         <tr *ngFor="let usuario of usuarios" [routerLink]="['/perfilUsuario', usuario.idUsuario]">
 
             <td>{{usuario.nombreUsuario}}</td>
-            <td>{{usuario.persona.nombresPersona}} " "{{usuario.persona.apellidosPersona}}</td>
+            <td>{{usuario.persona.nombresPersona}} {{usuario.persona.apellidosPersona}}</td>
             <td>{{usuario.correo}}</td>
             <td>{{usuario.fechaRegistro}}</td>
             <td>{{usuario.rol.nombreRol}}</td>
@@ -49,9 +48,8 @@
                 
             </td>
 
-
         </tr>
-
     </tbody>
 
 </table>
+

@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  backendUrl: 'https://c-proyectosjava-ecommerce-project.onrender.com/api'
+  backendUrl: 'http://localhost:8080/api'
 };

@@ -1,6 +1,6 @@
-export interface Persona{
-
-idPersona? : number;
+export interface PersonaActualizacion{
+   
+idPersona : number;
 nombresPersona: string;
 apellidosPersona: string;
 tipoDocumento: string;
@@ -12,4 +12,5 @@ correoSecundario: string;
 direccion: string;
 ciudad: string;
 pais: string;
+
 }

@@ -8,6 +8,9 @@ import { map, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { ProductoAdapter } from "../models/producto-adapter";
 import { environment } from "../../environments/enviroment";
+import { ProductoActualizacion } from "../models/productoActualiacion";
+
+
 
 
 
@@ -31,17 +34,19 @@ export class ProductoService{
     ){}
 
 
-    // Mètodo para obtener todos los productos paginados del backend
-    obtenerProductosPaginados(page: number = 0, size: number = 20): Observable<any> {
-   return this.http.get(`${this.apiUrl}/paginados?page=${page}&size=${size}`)
-    }
-
-
+     // Mètodo para obtener todos los productos
     obtenerProductos(): Observable<Producto[]>{
         return this.http.get<any[]>(this.apiUrl).pipe(
             map(data => data.map(item => this.adapter.adapt(item)))
         )
     }
+
+
+    // Mètodo para obtener todos los productos paginados del backend
+    obtenerProductosPaginados(page: number = 0, size: number = 20): Observable<any> {
+   return this.http.get(`${this.apiUrl}/productosPaginados?page=${page}&size=${size}`)
+    }
+
 
     // Mètodo para obtener por nombreProducto o por codigoProducto del backend
     buscarProducto(query:string): Observable<Producto[]>{
@@ -62,6 +67,12 @@ export class ProductoService{
         return this.http.get<any>(url).pipe(
             map(item => this.adapter.adapt(item))
         )
+    }
+
+    // Metodo para modificar producto
+    actualizarProducto(idProducto: number, productoActualizacion: ProductoActualizacion): Observable<Producto>{
+            return this.http.put<Producto>(`${this.apiUrl}/actualizarProducto/${idProducto}` ,productoActualizacion);
+
     }
 
     // Metodo para eliminar producto

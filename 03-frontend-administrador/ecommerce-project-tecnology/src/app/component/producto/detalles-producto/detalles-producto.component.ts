@@ -7,10 +7,12 @@ import { Marca } from '../../../models/marca';
 import { Categoria } from '../../../models/categoria';
 import { MarcaService } from '../../../services/marca.service';
 import { CategoriaService } from '../../../services/categoria.service';
+import { CargarImagenComponent } from "../../imagenes/cargar-imagen/cargar-imagen.component";
 
 @Component({
   selector: 'app-detalles-producto',
-  imports: [CommonModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, CargarImagenComponent],
   templateUrl: './detalles-producto.component.html',
   styleUrls: ['./detalles-producto.component.css']//Estilo CSS
 })

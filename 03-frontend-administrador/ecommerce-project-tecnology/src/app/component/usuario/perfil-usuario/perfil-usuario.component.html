@@ -31,6 +31,11 @@
   <p><strong>Pais:</strong> {{usuario.persona.pais}}</p>
 </div>
 
+    <button class="btn btn-primary btn-guardar" [routerLink]="['/modificarUsuario', usuario.idUsuario]">
+      MODIFICAR
+    </button>
+
+
 </div>
 <div *ngIf="!usuario">
   <p>Cargando perfil...</p>

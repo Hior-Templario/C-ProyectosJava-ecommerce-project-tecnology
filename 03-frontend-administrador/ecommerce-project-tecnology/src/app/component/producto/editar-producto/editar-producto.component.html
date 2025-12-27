@@ -1,0 +1,51 @@
+<form [formGroup]="formProducto" (ngSubmit)="actualizarProducto()" class="formulario">
+
+    <fieldset class="form-fieldset">
+    
+        <legend class="form-legend"> MODIFICAR INFORMACIÓN DEL PRODUCTO</legend>
+
+    <!-- Nombre Producto -->  
+
+    <div>
+        <label for="nombreProducto">nombre producto</label>
+        <input id="nombreProducto" class="form-control" formControlName="nombreProducto" type="text" placeholder="Ingrese nombre">
+    </div>
+
+    <!-- Nombre Descripción -->  
+    <div>
+        <label for="descripcion">descripcion</label>
+        <input id="descripcion" class="form-control" formControlName="descripcion" type="text" placeholder="Ingrese descripción">
+    </div>
+
+    <!-- Precio -->  
+    <div>
+        <label for="precio">precio</label>
+        <input id="precio" class="form-control" formControlName="precio" type="number" placeholder="Ingrese precio">
+    </div>
+    
+    <!-- marca -->  
+    <div>
+        <label for="marca">marca</label>
+        <input id="marca" class="form-control" formControlName="idMarca" type="number" placeholder="marca">
+    </div>
+
+
+    <!-- categoria -->  
+    <div>
+        <label for="categoria">categoria</label>
+        <input id="categoria" class="form-control" formControlName="idCategoria" type="number" placeholder="categoria">
+    </div>
+
+
+    <!-- Botón -->
+
+    <div class="d-grid mt-3">
+    
+        <button class="btn btn-primary btn-guardar" type="submit" >GUARDAR CAMBIOS</button>
+    
+    </div>
+    
+</fieldset>
+
+</form>
+
