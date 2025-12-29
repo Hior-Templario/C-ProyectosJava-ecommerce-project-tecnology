@@ -46,6 +46,7 @@ public class ProductoController {
     {
         Pageable pageable = PageRequest.of(page, size , Sort.by("nombreProducto").ascending());
         Page<ProductoDto>productos=productoService.obtenerTodosProductosConImagenesPaginados(pageable);
+
         return ResponseEntity.ok(productos);
     }
 

@@ -16,9 +16,9 @@ public interface UsuarioService {
 
 
     UsuarioDto obtenerUsuarioConImagen(Long idUsuario);
-    Page<UsuarioDto> obtenerTodosUsuariosConImagen(Pageable pageable);
+    Page<UsuarioDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable);
     UsuarioPersonaDto obtenerUsuarioPersonaConImagen(Long idUsuario);
-    Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagen(Pageable pageable);
+    Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagenPaginados(Pageable pageable);
     UsuarioDto crearUsuarioConImagen(UsuarioCrearDto usuarioDto) throws IOException;
     UsuarioPersonaDto crearUsuarioPersonaConImagen(UsuarioPersonaCrearDto usuarioDto) throws IOException;
 

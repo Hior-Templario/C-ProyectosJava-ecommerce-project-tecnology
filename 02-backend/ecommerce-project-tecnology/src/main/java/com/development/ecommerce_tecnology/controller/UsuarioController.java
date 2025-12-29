@@ -43,7 +43,7 @@ public class UsuarioController {
             @RequestParam(defaultValue = "20") int size){
 
         Pageable pageable = PageRequest.of(page, size , Sort.by("nombreUsuario").ascending());
-        Page<UsuarioDto>usuarios= usuarioService.obtenerTodosUsuariosConImagen(pageable);
+        Page<UsuarioDto>usuarios= usuarioService.obtenerTodosProductosConImagenesPaginados(pageable);
 
         return ResponseEntity.ok(usuarios);
     }
@@ -54,7 +54,7 @@ public class UsuarioController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size){
             Pageable pageable = PageRequest.of(page, size , Sort.by("nombreUsuario").ascending());
-            Page<UsuarioPersonaDto>usuariosPersonas= usuarioService.obtenerTodosUsuariosPersonasConImagen(pageable);
+            Page<UsuarioPersonaDto>usuariosPersonas= usuarioService.obtenerTodosUsuariosPersonasConImagenPaginados(pageable);
 
             return ResponseEntity.ok(usuariosPersonas);
     }

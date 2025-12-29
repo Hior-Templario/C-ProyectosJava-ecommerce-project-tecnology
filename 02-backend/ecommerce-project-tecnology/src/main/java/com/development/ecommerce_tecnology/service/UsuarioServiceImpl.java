@@ -54,6 +54,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     // Metodo para obtener un usuario con su imagen asociada
     @Override
+    @Transactional(readOnly= true)
     public UsuarioDto obtenerUsuarioConImagen(Long idUsuario) {
 
         // Buscar usuario por su ID o lanzar excepcion si no existe
@@ -77,6 +78,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
+    @Transactional(readOnly= true)
     public UsuarioPersonaDto obtenerUsuarioPersonaConImagen(Long idUsuario) {
 
         // Buscar usuario por su ID o lanzar excepcion si no existe
@@ -105,7 +107,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     // Método para obtener todos los usuarios con imagenes
     @Override
-    public Page<UsuarioDto> obtenerTodosUsuariosConImagen(Pageable pageable) {
+    @Transactional(readOnly= true)
+    public Page<UsuarioDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable) {
 
         // Obtener página de usuarios desdel el repositorio
         Page<Usuario> usuarioPage = usuarioRepository.findAll(pageable);
@@ -139,7 +142,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    public Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagen(Pageable pageable) {
+    @Transactional(readOnly= true)
+    public Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagenPaginados(Pageable pageable) {
 
         // Obtener página de usuarios desdel el repositorio
         Page<Usuario> usuarioPersonaPage = usuarioRepository.findAll(pageable);
