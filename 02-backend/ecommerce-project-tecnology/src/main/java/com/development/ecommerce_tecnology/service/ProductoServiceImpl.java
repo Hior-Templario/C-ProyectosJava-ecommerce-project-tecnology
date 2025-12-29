@@ -72,7 +72,6 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    @Transactional(readOnly= true)
     public Page<ProductoDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable) {
 
         // Obtener página de usuarios desdel el repositorio

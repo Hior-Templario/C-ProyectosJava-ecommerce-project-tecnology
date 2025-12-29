@@ -107,7 +107,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     // Método para obtener todos los usuarios con imagenes
     @Override
-    @Transactional(readOnly= true)
     public Page<UsuarioDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable) {
 
         // Obtener página de usuarios desdel el repositorio
@@ -142,7 +141,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    @Transactional(readOnly= true)
     public Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagenPaginados(Pageable pageable) {
 
         // Obtener página de usuarios desdel el repositorio
