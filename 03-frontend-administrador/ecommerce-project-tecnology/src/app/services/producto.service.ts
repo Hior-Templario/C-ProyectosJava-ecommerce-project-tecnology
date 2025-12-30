@@ -73,7 +73,7 @@ export class ProductoService{
 
     // Metodo para modificar producto
     actualizarProducto(idProducto: number, productoActualizacion: ProductoActualizacion): Observable<Producto>{
-            return this.http.put<Producto>(`${this.apiUrl}/actualizarProducto/${idProducto}` ,productoActualizacion);
+            return this.http.put<Producto>(`${this.apiUrl}/modificarProducto/${idProducto}` ,productoActualizacion);
 
     }
 

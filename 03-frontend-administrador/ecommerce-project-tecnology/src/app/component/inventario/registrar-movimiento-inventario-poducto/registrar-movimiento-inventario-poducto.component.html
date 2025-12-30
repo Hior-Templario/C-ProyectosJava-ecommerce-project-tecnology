@@ -1,0 +1,62 @@
+
+
+    <form [formGroup]="formMovimientoInventario" (ngSubmit)="onSubmit()" class="formulario">
+
+    
+    <fieldset class="form-fieldset">
+        
+        <legend class="form-legend">  Ingresar producto al inventario</legend>
+
+        <div class="form-group">
+        
+        <label for="nombreProducto"> Nombre producto</label>
+        <input id="nombreProducto" type="text" formControlName="nombreProducto" class="form-control">
+
+        </div>
+    
+        <!-- Tipo de movimiento-->
+        <div class="form-group">
+            <label for="tipoMovimiento"> Tipo de Movimiento</label>
+            <select id="tipoMovimiento" formControlName="tipoMovimiento" class="form-control">
+                <option value="ENTRADA">ENTRADA</option>
+            </select>
+
+            <div *ngIf="f.tipoMovimiento.touched && f.tipoMovimiento.invalid" class="error">
+                El tipo de movimiento es obligatorio
+            </div>
+        </div>
+
+        <!--Cantidad-->
+        <div class="form-group">
+            <label for="cantidad"> Cantidad</label>
+            <input id="cantidad" type="number" formControlName="cantidad" class="form-control">
+            <div *ngIf="f.cantidad.touched && f.cantidad.invalid" class="error">
+                La cantidad es obligatoria y debe ser valida
+            </div>
+        </div>
+
+
+        <!--Observaciones-->
+        <div class="form-group">
+            <label for="observaciones"> Observaciones</label>
+            <input id="observaciones" formControlName="observaciones" class="form-control">
+            <div *ngIf="f.cantidad.touched && f.cantidad.invalid" class="error">
+                La cantidad es obligatoria y debe ser valida
+            </div>
+        </div>
+
+        <!--fecha demovimiento-->
+
+
+        <div><label for="miInput" hidden>fecha movimiento</label></div>
+
+        </fieldset>
+
+        <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-primary btn-guardar">REGISTRAR INGRESO </button>
+        </div>
+
+
+    </form>
+
+

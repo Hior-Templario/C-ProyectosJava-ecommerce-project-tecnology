@@ -1,4 +1,13 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+}
 
+html, body{
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 /* ============================
    Estilos de modal
@@ -34,7 +43,7 @@
    ============================ */
 
 .banner {
-width: 100vw; /* ocupa todo ell ancho de la pantalla*/
+width: 100%; /* ocupa todo ell ancho de la pantalla*/
 background-color:  #011126 ;
 display: flex; /*Aplica flexbox para organizar los elementos dentro de la barra*/
 align-items: center; /* Centra verticalmente los elementos*/
@@ -46,9 +55,7 @@ color: #c8e2fd;
 
 .logo{
 
-    width: 12vw;
-    max-width: 200px;
-    min-width: 120px;
+    width: 140px;
     height:auto;
 
    }
@@ -87,8 +94,6 @@ align-items: center;
  
     background-color: #c8e2fd;
     min-height: augit; 
-    margin: 0 auto;
-    padding: 0 auto;
     max-width: 100%;
     width: 100%;
     position: relative;
@@ -446,6 +451,31 @@ ____________________________________
 .botones-accion{
     margin: 10px 50px 10px 50px;
 }
+
+
+
+@media (max-width: 768px) {
+    .contenedor{
+        flex-direction: column;
+    }
+
+    .aside-menu{
+        width: 100%;
+        min-width: unset;
+        max-width: 100%;
+    }
+
+    .banner{
+        padding: 0 15px;
+    }
+
+    .logo{
+        width: 110px;
+       
+    }
+}
+
+    
 
 
 

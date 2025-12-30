@@ -13,10 +13,11 @@ import { DetallesProductoComponent } from './component/producto/detalles-product
 import { CrearMarcaComponent } from './component/marca/crear-marca/crear-marca.component';
 import { ListaMarcaComponent } from './component/marca/lista-marca/lista-marca.component';
 import { DetallesMarcaComponent } from './component/marca/detalles-marca/detalles-marca.component';
-import { RegistrarMovimientoComponent } from './component/inventario/registrar-movimiento/registrar-movimiento.component';
+import { RegistrarMovimientoInventarioBusquedaComponent } from './component/inventario/registrar-movimiento-inventario-busqueda/registrar-movimiento-inventario-busqueda';
 import { ListarInventarioComponent } from './component/inventario/listar-inventario/listar-inventario.component';
 import { EditarProductoComponent } from './component/producto/editar-producto/editar-producto.component';
 import { EditarUsuarioComponent } from './component/usuario/editar-usuario/editar-usuario/editar-usuario.component';
+import { RegistrarMovimientoInventarioPoductoComponent } from './component/inventario/registrar-movimiento-inventario-poducto/registrar-movimiento-inventario-poducto.component';
 
 export const routes: Routes = [
     {   path: 'dashboard', component: DashboardComponent },
@@ -31,7 +32,9 @@ export const routes: Routes = [
 
     {   path: 'listarInventario', component: ListarInventarioComponent }, 
     
-    {   path: 'registrarMovimiento', component: RegistrarMovimientoComponent},
+    {   path: 'registrarMovimiento', component: RegistrarMovimientoInventarioBusquedaComponent},
+
+    {   path: 'registrarMovimiento/:idProducto', component: RegistrarMovimientoInventarioPoductoComponent},
 
     {   path: 'listaCategorias', component: ListaCategoriaComponent },
 

@@ -11,12 +11,12 @@ import { RouterModule } from '@angular/router';
 
 
 @Component({
-  selector: 'app-registrar-movimiento',
+  selector: 'app-registrar-movimiento-inventario-busqueda',
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './registrar-movimiento.component.html',
-  styleUrls:[ './registrar-movimiento.component.css']
+  templateUrl: './registrar-movimiento-inventario-busqueda.html',
+  styleUrls:[ './registrar-movimiento-inventario-busqueda.css']
 })
-export class RegistrarMovimientoComponent implements OnInit{
+export class RegistrarMovimientoInventarioBusquedaComponent implements OnInit{
 
   formMovimientoInventario!: FormGroup;
   productosFiltrados: Producto [] = [];

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegistrarMovimientoComponent } from './registrar-movimiento.component';
+import { RegistrarMovimientoComponent } from './registrar-movimiento-inventario-busqueda';
 
 describe('RegistrarMovimientoComponent', () => {
   let component: RegistrarMovimientoComponent;

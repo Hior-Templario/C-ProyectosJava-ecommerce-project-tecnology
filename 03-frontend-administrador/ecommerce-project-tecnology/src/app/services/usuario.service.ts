@@ -65,7 +65,7 @@ export class UsuarioService{
 
     // Metodo para actualizar producto
     actualizarUsuario(idUsuario: number, usuarioActualizacion: UsuarioActualizacion): Observable<Usuario>{
-      return this.http.patch<Usuario>(`${this.apiUrl}/actualizarUsuario/${idUsuario}`, usuarioActualizacion);
+      return this.http.put<Usuario>(`${this.apiUrl}/modificarUsuario/${idUsuario}`, usuarioActualizacion);
 
     } 
 

@@ -54,9 +54,18 @@ private inicializarForm(): void {
         Validators.required,
         EcommerceValidador.noVacioConEspacios
       ]],
-  
-      idRol: [null, Validators.required],
-      idEstado: [null, Validators.required],
+
+      idRol:["", []],
+    
+      nombreRol: ["", [
+        Validators.required,
+        Validators.minLength(2),
+        EcommerceValidador.noVacioConEspacios
+      ]],
+      
+      idEstado:["", []],
+
+      nombreEstado: [null, Validators.required],
 
       persona: this.formBuilder.group({
 
@@ -127,7 +136,9 @@ private inicializarForm(): void {
           nombreUsuario: usuario.nombreUsuario,
           correo: usuario.correo,
           idRol: usuario.rol.idRol,
+          nombreRol: usuario.rol.nombreRol,
           idEstado: usuario.estadoUsuario.idEstado,
+          nombreEstado: usuario.estadoUsuario.nombreEstado,
           persona: {
                 idPersona: usuario.persona.idPersona,
                 nombresPersona: usuario.persona.nombresPersona,
@@ -146,7 +157,7 @@ private inicializarForm(): void {
       },
       error:(err) =>{
         // Manejo del error si el usuario no existe o falla la periciòn
-        console.error("Error cargando producto", err);
+        console.error("Error cargando usuario", err);
         alert('Usuario no encontrado');
         this.router.navigate(['/listaUsuarios']);
       }

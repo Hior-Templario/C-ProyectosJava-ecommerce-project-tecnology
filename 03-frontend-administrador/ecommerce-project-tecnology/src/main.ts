@@ -16,11 +16,12 @@ import { DetallesProductoComponent } from "./app/component/producto/detalles-pro
 import { CrearMarcaComponent } from "./app/component/marca/crear-marca/crear-marca.component";
 import { ListaMarcaComponent } from "./app/component/marca/lista-marca/lista-marca.component";
 import { DetallesMarcaComponent } from "./app/component/marca/detalles-marca/detalles-marca.component";
-import { RegistrarMovimientoComponent } from "./app/component/inventario/registrar-movimiento/registrar-movimiento.component";
+import { RegistrarMovimientoInventarioBusquedaComponent } from "./app/component/inventario/registrar-movimiento-inventario-busqueda/registrar-movimiento-inventario-busqueda";
 import { ListarInventarioComponent } from "./app/component/inventario/listar-inventario/listar-inventario.component";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { EditarProductoComponent } from "./app/component/producto/editar-producto/editar-producto.component";
 import { EditarUsuarioComponent } from "./app/component/usuario/editar-usuario/editar-usuario/editar-usuario.component";
+import { RegistrarMovimientoInventarioPoductoComponent } from "./app/component/inventario/registrar-movimiento-inventario-poducto/registrar-movimiento-inventario-poducto.component";
 
 const routes: Routes = [ // Se definen las rutas disponibles en la app.
 
@@ -31,7 +32,8 @@ const routes: Routes = [ // Se definen las rutas disponibles en la app.
 {   path: 'detallesProducto/:idProducto', component: DetallesProductoComponent},
 {   path: 'listarInventario', component: ListarInventarioComponent }, 
 {   path: 'listaCategorias', component: ListaCategoriaComponent }, // Ruta ' /categorias' muestra listaCategoriaComponent
-{   path: 'registrarMovimiento', component: RegistrarMovimientoComponent},
+{   path: 'registrarMovimiento', component: RegistrarMovimientoInventarioBusquedaComponent},
+{   path: 'registrarMovimiento/:idProducto', component: RegistrarMovimientoInventarioPoductoComponent},
 {   path: 'crearCategoria', component: CrearCategoriaComponent},
 {   path: 'listaMarca', component: ListaMarcaComponent},
 {   path: 'crearMarca', component: CrearMarcaComponent},

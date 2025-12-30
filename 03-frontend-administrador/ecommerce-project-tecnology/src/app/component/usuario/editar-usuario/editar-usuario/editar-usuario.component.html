@@ -3,14 +3,14 @@
 
     <fieldset class="form-fieldset">
 
-        <legend class="form-legend">  MODIFICAR INFORMACIÓN DEL USUARIO</legend>
+        <legend class="form-legend"> MODIFICAR INFORMACIÓN DEL USUARIO</legend>
 
         <!-- ID Producto (oculto solo para edicions)-->
 
 
         <div class="row">
 
-            <!-- Nombre Producto -->
+            <!-- Nombre Usuario -->
 
             <div class="formulario-col">
                 <label for="nombreUsuario">Nombre de usuario</label>
@@ -27,154 +27,161 @@
 
         </div>
 
-
         <div>
-                <label for="idRol">Rol</label>
-                <input id="idRol" class="form-control" formControlName="idRol" type="number">
+            <label for="idRol">Rol</label>
+            <input id="idRol" class="form-control" formControlName="idRol" type="number">
         </div>
 
-        
         <div>
-                <label for="idEstado">idEstado</label>
-                <input id="idEstado" class="form-control" formControlName="idEstado" type="number">
+            <label for="nombreRol">Nombre de rol</label>
+
+            <input id="nombreRol" class="form-control" formControlName="nombreRol" type="text">
         </div>
 
-           
+        <div>
+            <label for="idEstado">idEstado</label>
+            <input id="idEstado" class="form-control" formControlName="idEstado" type="number">
+        </div>
+
+        <div>
+            <label for="nombreEstado">Nombre de estado</label>
+            <input id="nombreEstado" class="form-control" formControlName="nombreEstado" type="text">
+        </div>
 
 
 
     </fieldset>
 
 
-<div formGroupName="persona">
+    <div formGroupName="persona">
 
-    <fieldset class="form-fieldset mt-3">
+        <fieldset class="form-fieldset mt-3">
 
-        <legend class="form-legend"> Datos personales</legend>
-        <!-- DATOS PERSONALES -->
+            <legend class="form-legend"> Datos personales</legend>
+            <!-- DATOS PERSONALES -->
 
-        <div class="row">
+            <div class="row">
 
-            <input type="hidden" formControlName="idPersona">
+                <input type="hidden" formControlName="idPersona">
 
-            <!-- Nombre persona -->
+                <!-- Nombre persona -->
 
-            <div class="formulario-col">
-                <label for="nombresPersona">Nombres</label>
-                <input id="nombresPersona" class="form-control" formControlName="nombresPersona" type="text"
-                    placeholder="Ingrese nombres del usuario">
+                <div class="formulario-col">
+                    <label for="nombresPersona">Nombres</label>
+                    <input id="nombresPersona" class="form-control" formControlName="nombresPersona" type="text"
+                        placeholder="Ingrese nombres del usuario">
+                </div>
+
+                <!-- Apellidos Persona -->
+                <div class="formulario-col">
+                    <label for="apellidosPersona">Apellidos</label>
+                    <input id="apellidosPersona" class="form-control" formControlName="apellidosPersona" type="text"
+                        placeholder="Ingrese apellidos del usuario">
+                </div>
+
             </div>
 
-            <!-- Apellidos Persona -->
-            <div class="formulario-col">
-                <label for="apellidosPersona">Apellidos</label>
-                <input id="apellidosPersona" class="form-control" formControlName="apellidosPersona" type="text"
-                    placeholder="Ingrese apellidos del usuario">
+            <div class="row">
+
+                <!-- Tipo Documento -->
+                <div class="formulario-col">
+                    <label for="tipoDocumento">Tipo de documento</label>
+                    <select id="tipoDocumento" class="form-control" formControlName="tipoDocumento">
+                        <option value="">Seleccione ...</option>
+                        <option value="CC">CC-Cédula de Ciudadanía</option>
+                        <option value="CE">CE - Cédula de Extranjería</option>
+                        <option value="TI">TI - Tarjeta de Identidad </option>
+                        <option value="PA">PA - Pasaporte</option>
+
+                    </select>
+                </div>
+
+                <!-- Numero Documento -->
+                <div class="formulario-col">
+                    <label for="numeroDocumento">Numero de documento</label>
+                    <input id="numeroDocumento" class="form-control" formControlName="numeroDocumento" type="text"
+                        placeholder="Ingrese numero documento">
+                </div>
+
             </div>
 
-        </div>
+            <div class="row">
 
-        <div class="row">
+                <!-- fechaNacimiento -->
+                <div class="formulario-col">
+                    <label for="fechaNacimiento">Fecha de nacimiento</label>
+                    <input id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento" type="date"
+                        placeholder=" Ingrese fecha de nacimiento">
+                </div>
 
-            <!-- Tipo Documento -->
-            <div class="formulario-col">
-                <label for="tipoDocumento">Tipo de documento</label>
-                <select id="tipoDocumento" class="form-control" formControlName="tipoDocumento">
-                    <option value="">Seleccione ...</option>
-                    <option value="CC">CC-Cédula de Ciudadanía</option>
-                    <option value="CE">CE - Cédula de Extranjería</option>
-                    <option value="TI">TI - Tarjeta de Identidad </option>
-                    <option value="PA">PA - Pasaporte</option>
+                <!-- Genero -->
+                <div class="formulario-col">
+                    <label for="sexo">Genero</label>
+                    <select id="sexo" class="form-control" formControlName="sexo">
+                        <option value="">Seleccione ...</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
 
-                </select>
+                    </select>
+                </div>
+
             </div>
 
-            <!-- Numero Documento -->
-            <div class="formulario-col">
-                <label for="numeroDocumento">Numero de documento</label>
-                <input id="numeroDocumento" class="form-control" formControlName="numeroDocumento" type="text"
-                    placeholder="Ingrese numero documento">
+            <div class="row">
+
+                <!-- Telefono -->
+                <div class="formulario-col">
+                    <label for="telefono">Telefono</label>
+                    <input id="telefono" class="form-control" formControlName="telefono" type="tel"
+                        placeholder=" Ingrese numero de telefono">
+                </div>
+
+
+                <!-- Correo Secundario -->
+                <div class="formulario-col">
+                    <label for="correoSecundario">Correo secundario</label>
+                    <input id="correoSecundario" class="form-control" formControlName="correoSecundario" type="text"
+                        placeholder="Ingrese correo secundario">
+                </div>
+
             </div>
 
-        </div>
+            <div class="row">
 
-        <div class="row">
 
-            <!-- fechaNacimiento -->
-            <div class="formulario-col">
-                <label for="fechaNacimiento">Fecha de nacimiento</label>
-                <input id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento" type="date"
-                    placeholder=" Ingrese fecha de nacimiento">
+                <!-- Direccion -->
+                <div class="formulario-col">
+                    <label for="direccion">Direccion</label>
+                    <input id="direccion" class="form-control" formControlName="direccion" type="text"
+                        placeholder="Ingrese direccion">
+                </div>
+
+                <!-- ciudad -->
+                <div class="formulario-col">
+                    <label for="ciudad">Ciudad</label>
+                    <input id="ciudad" class="form-control" formControlName="ciudad" type="text"
+                        placeholder="Ingrese ciudad">
+                </div>
             </div>
 
-            <!-- Genero -->
-            <div class="formulario-col">
-                <label for="sexo">Genero</label>
-                <select id="sexo" class="form-control" formControlName="sexo">
-                    <option value="">Seleccione ...</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
+            <div class="row">
 
-                </select>
+
+                <!-- pais -->
+                <div class="formulario-col">
+                    <label for="pais">pais</label>
+                    <input id="pais" class="form-control" formControlName="pais" type="text" placeholder="Ingrese pais">
+                </div>
+
             </div>
 
-        </div>
+            <!-- Botón -->
 
-        <div class="row">
-
-            <!-- Telefono -->
-            <div class="formulario-col">
-                <label for="telefono">Telefono</label>
-                <input id="telefono" class="form-control" formControlName="telefono" type="tel"
-                    placeholder=" Ingrese numero de telefono">
+            <div class="d-grid mt-3">
+                <button class="btn btn-primary btn-guardar" type="submit"> GUARDAR USUARIO</button>
             </div>
 
-
-            <!-- Correo Secundario -->
-            <div class="formulario-col">
-                <label for="correoSecundario">Correo secundario</label>
-                <input id="correoSecundario" class="form-control" formControlName="correoSecundario" type="text"
-                    placeholder="Ingrese correo secundario">
-            </div>
-
-        </div>
-
-        <div class="row">
-
-
-            <!-- Direccion -->
-            <div class="formulario-col">
-                <label for="direccion">Direccion</label>
-                <input id="direccion" class="form-control" formControlName="direccion" type="text"
-                    placeholder="Ingrese direccion">
-            </div>
-
-            <!-- ciudad -->
-            <div class="formulario-col">
-                <label for="ciudad">Ciudad</label>
-                <input id="ciudad" class="form-control" formControlName="ciudad" type="text"
-                    placeholder="Ingrese ciudad">
-            </div>
-        </div>
-
-        <div class="row">
-
-
-            <!-- pais -->
-            <div class="formulario-col">
-                <label for="pais">pais</label>
-                <input id="pais" class="form-control" formControlName="pais" type="text" placeholder="Ingrese pais">
-            </div>
-
-        </div>
-
-        <!-- Botón -->
-
-        <div class="d-grid mt-3">
-            <button class="btn btn-primary btn-guardar" type="submit"> GUARDAR USUARIO</button>
-        </div>
-
-    </fieldset>
+        </fieldset>
 
     </div>
 
