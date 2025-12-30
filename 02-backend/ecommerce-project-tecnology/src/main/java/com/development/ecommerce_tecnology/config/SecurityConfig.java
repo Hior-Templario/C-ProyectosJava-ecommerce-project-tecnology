@@ -55,7 +55,6 @@ public class SecurityConfig {
                                 "/api/login",
                                 "/api/productos/**",
                                 "/api/usuarios/**",
-                                "/api/modificarUsuario",
                                 "/api/categorias/**",
                                 "/api/marcas/**",
                                 "/api/estadosUsuario/**",
@@ -94,7 +93,7 @@ public class SecurityConfig {
                 "https://proyectos-angular-ecommerce-project.vercel.app"
         ));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("*"));
 

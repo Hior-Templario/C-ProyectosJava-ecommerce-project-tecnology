@@ -43,7 +43,7 @@ public class UsuarioController {
             @RequestParam(defaultValue = "20") int size){
 
         Pageable pageable = PageRequest.of(page, size , Sort.by("nombreUsuario").ascending());
-        Page<UsuarioDto>usuarios= usuarioService.obtenerTodosProductosConImagenesPaginados(pageable);
+        Page<UsuarioDto>usuarios= usuarioService.obtenerTodosUsuariosConImagenesPaginados(pageable);
 
         return ResponseEntity.ok(usuarios);
     }
@@ -190,6 +190,11 @@ public class UsuarioController {
 
 
         return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
+    }
+
+    @PutMapping("modificarUsuario/{idUsuario}")   public ResponseEntity<UsuarioDto> ActualizarUsuario(@PathVariable Long idUsuario, @Valid @RequestBody UsuarioActualizarDto usuarioActualizarDto)throws IOException{
+        UsuarioDto usuarioActualizado = usuarioService.actualizaUsuario(idUsuario,usuarioActualizarDto );
+        return ResponseEntity.ok(usuarioActualizado);
     }
 
 }

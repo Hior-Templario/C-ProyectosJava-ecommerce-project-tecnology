@@ -137,7 +137,7 @@ public class ProductoController {
     }
 
 
-    @PutMapping("actualizarProducto/{idProducto}")
+    @PutMapping("modificarProducto/{idProducto}")
     public ResponseEntity<ProductoDto> ActualizarProducto(@PathVariable Long idProducto, @Valid @RequestBody ProductoActualizarDto productoActualizarDto)throws IOException{
         ProductoDto productoActualizado = productoService.actualizaProducto(idProducto,productoActualizarDto );
         return ResponseEntity.ok(productoActualizado);

@@ -14,13 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
 // Indica que esta clase es un servicio de spring y puede ser inyectado como dependencia
@@ -32,25 +32,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     // Repositorios e inyecciones de dependencias necesarias operar
     private final UsuarioRepository usuarioRepository;
-    private final RolRepository rolRepository;
-    private final EstadoUsuarioRepository estadoUsuarioRepository;
     private final PersonaRepository personaRepository;
+    private final RolService rolService;
+    private final EstadoUsuarioService estadoUsuarioService;
     private final ImagenService imagenService;
     private final UsuarioMapper usuarioMapper;
+    private final UsuarioFactory usuarioFactory;
+    private final UsuarioUpdater usuarioUpdater;
     private final AmazonS3Service amazonS3Service;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // Constructor para inyectar dependencias
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository, EstadoUsuarioRepository estadoUsuarioRepository, PersonaRepository personaRepository, ImagenService imagenService, UsuarioMapper usuarioMapper, AmazonS3Service amazonS3Service) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RolService rolService, EstadoUsuarioService estadoUsuarioService, PersonaRepository personaRepository, ImagenService imagenService, UsuarioMapper usuarioMapper, UsuarioFactory usuarioFactory, UsuarioUpdater usuarioUpdater, AmazonS3Service amazonS3Service) {
         this.usuarioRepository = usuarioRepository;
-        this.rolRepository = rolRepository;
-        this.estadoUsuarioRepository = estadoUsuarioRepository;
+        this.rolService = rolService;
+        this.estadoUsuarioService = estadoUsuarioService;
         this.personaRepository = personaRepository;
         this.imagenService = imagenService;
         this.usuarioMapper = usuarioMapper;
+        this.usuarioFactory = usuarioFactory;
+        this.usuarioUpdater = usuarioUpdater;
         this.amazonS3Service = amazonS3Service;
     }
-
 
     // Metodo para obtener un usuario con su imagen asociada
     @Override
@@ -75,7 +77,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Convertir el objeto Usuario a usuarioDto, incluyendo la imagen
         return usuarioMapper.mappearUsuarioDto(usuario, imagenDeUsuario);
     }
-
 
     @Override
     @Transactional(readOnly= true)
@@ -104,10 +105,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioMapper.mappearUsuarioPersonaDto(usuario, imagenDeUsuario);
     }
 
-
     // Método para obtener todos los usuarios con imagenes
     @Override
-    public Page<UsuarioDto> obtenerTodosProductosConImagenesPaginados(Pageable pageable) {
+    public Page<UsuarioDto> obtenerTodosUsuariosConImagenesPaginados(Pageable pageable) {
 
         // Obtener página de usuarios desdel el repositorio
         Page<Usuario> usuarioPage = usuarioRepository.findAll(pageable);
@@ -138,7 +138,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return new PageImpl<>(usuariosDto, pageable,usuarioPage.getTotalElements());
     }
-
 
     @Override
     public Page<UsuarioPersonaDto> obtenerTodosUsuariosPersonasConImagenPaginados(Pageable pageable) {
@@ -174,24 +173,20 @@ public class UsuarioServiceImpl implements UsuarioService {
         return new PageImpl<>(usuariosPersonasDto, pageable,usuarioPersonaPage.getTotalElements());
     }
 
-
     // Método para crear un nuevo usuario con su respectiva imagen
     @Override
     @Transactional
     public UsuarioDto crearUsuarioConImagen(UsuarioCrearDto usuarioCrearDto) throws IOException {
-        System.out.println("ID rol:" + usuarioCrearDto.getIdRol() + " " + usuarioCrearDto.getNombreRol());
-        System.out.println("ID estado:" + usuarioCrearDto.getIdEstado() + " " + usuarioCrearDto.getNombreEstado());
 
-        // Busca el rol por ID o lanzar excepción si no existe
-        Rol rol = rolRepository.findById(usuarioCrearDto.getIdRol())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
+        Rol rol = rolService.obtenerRolEntidad(usuarioCrearDto.getIdRol());
+        EstadoUsuario estadoUsuario = estadoUsuarioService.obtemerUsarioEstadoEntidad(usuarioCrearDto.getIdEstado());
 
-        // Busca el estado por ID o lanzar excepción si no existe
-        EstadoUsuario estadoUsuario =  estadoUsuarioRepository.findById(usuarioCrearDto.getIdEstado())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "estado no encontrado"));
 
-        // Construir entidad Usuario desde el DTO y guardar en base de datos
-        Usuario usuario = construirUsuarioDesdeDto(usuarioCrearDto ,rol ,estadoUsuario);
+        Usuario usuario = usuarioFactory.crearUsuario(
+                usuarioCrearDto,
+                rol,
+                estadoUsuario
+        );
         usuarioRepository.save(usuario);
 
         // subir imagen asociada a usuario
@@ -200,10 +195,9 @@ public class UsuarioServiceImpl implements UsuarioService {
                 TipoEntidad.USUARIO,
                 usuario.getIdUsuario()
         );
-        // Retornar DTO con información completa del usuario, incluyendo imagen
+
         return obtenerUsuarioConImagen(usuario.getIdUsuario());
     }
-
 
     //Método para crear un nuevo usuario con su respectiva imagen
     @Override
@@ -211,97 +205,42 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioPersonaDto crearUsuarioPersonaConImagen(UsuarioPersonaCrearDto usuarioPersonaCrearDto) throws IOException {
         System.out.println("DTO Completo" + usuarioPersonaCrearDto.toString());
 
-        // Busca el rol por ID o lanzar excepción si no existe
-        Rol rol = rolRepository.findById(usuarioPersonaCrearDto.getIdRol())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
+        Rol rol = rolService.obtenerRolEntidad(usuarioPersonaCrearDto.getIdRol());
+        EstadoUsuario estadoUsuario = estadoUsuarioService.obtemerUsarioEstadoEntidad(usuarioPersonaCrearDto.getIdEstado());
 
 
-        // Busca el estado por ID o lanzar excepción si no existe
-        EstadoUsuario estadoUsuario =  estadoUsuarioRepository.findById(usuarioPersonaCrearDto.getIdEstado())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "estado no encontrado"));
-
-        // Construir entidad Usuario desde el DTO y guardar en base de datos
-        Usuario usuario = construirUsuarioPersonaDesdeDto(usuarioPersonaCrearDto ,rol , estadoUsuario);
+        Usuario usuario = usuarioFactory.crearUsuarioConPersona(usuarioPersonaCrearDto ,rol , estadoUsuario);
         usuarioRepository.save(usuario);
 
-            // Obtener la imagen enviada desde DTO
-            ImagenCrearDto img = usuarioPersonaCrearDto.getImagenUsuario();
-            logger.info("Llego imagen?:" + img);
+        // subir imagen asociada a usuario
+        imagenService.subirImagenPorEntidad(
+                usuarioPersonaCrearDto.getImagenUsuario(),
+                TipoEntidad.USUARIO,
+                usuario.getIdUsuario()
+        );
 
-
-                // Validar si hay archivo de imagen válido
-                if (img !=null && img.getArchivo() != null && !img.getArchivo().isEmpty()) {
-                    logger.info("Imagen Recibida");
-
-                    // Generar nombre Unico para el archivo
-                    String nombreArchivo = UUID.randomUUID() + "_" + img.getArchivo().getOriginalFilename();
-                   if (img.getTipo() != TipoEntidad.USUARIO){
-                       throw  new IllegalArgumentException("Solo se permite imagen tipo Usuario");
-                   }
-
-                    Long idEntidad= usuario.getIdUsuario();
-                    // Subir archivo a Amazon S3
-                      //amazonS3Service.subirArchivo(img.getArchivo(), nombreArchivo, img.getTipo(), idEntidad);
-
-                }
-                else {
-                    System.out.println("Imagen No Recibida");
-                }
-        // Retornar DTO con información completa del usuario, incluyendo imagen
         return obtenerUsuarioPersonaConImagen(usuario.getIdUsuario());
     }
 
-    // Método auxiliar para construir un objeto usuario desde un DTO
-    private Usuario construirUsuarioDesdeDto(UsuarioCrearDto usuarioDto, Rol rol , EstadoUsuario estadoUsuario) {
+    @Override
+    @Transactional
+    public UsuarioDto actualizaUsuario(
+            long idUsuario,
+            UsuarioActualizarDto usuarioActualizarDto) throws IOException {
 
-        Usuario usuario = new Usuario();
-        usuario.setNombreUsuario(usuarioDto.getNombreUsuario());
-        usuario.setCorreo(usuarioDto.getCorreo());
-        usuario.setContrasenia(passwordEncoder.encode(usuarioDto.getContrasenia()));
-        usuario.setFechaRegistro(usuarioDto.getFechaRegistro());
-        usuario.setRol(rol);
-        usuario.setEstadoUsuario(estadoUsuario);
+        // Busca usuario existente
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        return usuario;
-    }
+        // Busca rol y estado
+        Rol rol = rolService.obtenerRolEntidad( usuarioActualizarDto.getIdRol());
+        EstadoUsuario estadoUsuario = estadoUsuarioService.obtemerUsarioEstadoEntidad(usuarioActualizarDto.getIdEstado());
 
-
-    // Método auxiliar para construir un objeto usuario persona desde un DTO
-    private Usuario construirUsuarioPersonaDesdeDto( UsuarioPersonaCrearDto usuarioPersonaDto , Rol rol , EstadoUsuario estadoUsuario){
-
-        Usuario usuario = new Usuario();
-        usuario.setNombreUsuario(usuarioPersonaDto.getNombreUsuario());
-        usuario.setCorreo(usuarioPersonaDto.getCorreo());
-        usuario.setContrasenia(passwordEncoder.encode(usuarioPersonaDto.getContrasenia()));
-        usuario.setFechaRegistro(usuarioPersonaDto.getFechaRegistro());
-
-        usuario.setRol(rol);
+        usuarioUpdater.actualizarUsuario(usuario, usuarioActualizarDto,rol,estadoUsuario);
+        usuarioRepository.save(usuario);
 
 
-        // aquí el problema:
-        EstadoUsuario estado = estadoUsuarioRepository.findById(usuarioPersonaDto.getIdEstado())
-                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
-
-        usuario.setEstadoUsuario(estado);
-
-
-        Persona persona = new Persona();
-        persona.setNombresPersona(usuarioPersonaDto.getPersonaDto().getNombresPersona());
-        persona.setApellidosPersona(usuarioPersonaDto.getPersonaDto().getApellidosPersona());
-        persona.setTipoDocumento(usuarioPersonaDto.getPersonaDto().getTipoDocumento());
-        persona.setNumeroDocumento(usuarioPersonaDto.getPersonaDto().getNumeroDocumento());
-        persona.setFechaNacimiento(usuarioPersonaDto.getPersonaDto().getFechaNacimiento());
-        persona.setSexo(usuarioPersonaDto.getPersonaDto().getSexo());
-        persona.setTelefono(usuarioPersonaDto.getPersonaDto().getTelefono());
-        persona.setCorreoSecundario(usuarioPersonaDto.getPersonaDto().getCorreoSecundario());
-        persona.setDireccion(usuarioPersonaDto.getPersonaDto().getDireccion());
-        persona.setCiudad(usuarioPersonaDto.getPersonaDto().getCiudad());
-        persona.setPais(usuarioPersonaDto.getPersonaDto().getPais());
-        personaRepository.save(persona);
-
-        usuario.setPersona(persona);
-
-        return usuario;
+        return obtenerUsuarioConImagen(idUsuario);
     }
 
 }

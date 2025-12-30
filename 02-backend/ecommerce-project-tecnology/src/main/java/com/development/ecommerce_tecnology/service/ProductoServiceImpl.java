@@ -19,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -35,18 +34,22 @@ public class ProductoServiceImpl implements ProductoService {
     private final MarcaService marcaService;
     private final ImagenService imagenService;
     private final ProductoMapper productoMapper;
+    private final ProductoFactory productoFactory;
+    private final ProductoUpdater productoUpdater;
 
     // Logger para registrar eventos y errores
     private static final Logger logger =
             LoggerFactory.getLogger(ProductoServiceImpl.class);
 
     // Constructor para inyección de dependencias
-    public ProductoServiceImpl(ProductoRepository productoRepository,  CategoriaService categoriaService, MarcaService marcaService, ImagenService imagenService, ProductoMapper productoMapper) {
+    public ProductoServiceImpl(ProductoRepository productoRepository, CategoriaService categoriaService, MarcaService marcaService, ImagenService imagenService, ProductoMapper productoMapper, ProductoFactory productoFactory, ProductoUpdater productoUpdater) {
         this.productoRepository = productoRepository;
         this.categoriaService = categoriaService;
         this.marcaService = marcaService;
         this.imagenService = imagenService;
         this.productoMapper = productoMapper;
+        this.productoFactory = productoFactory;
+        this.productoUpdater = productoUpdater;
     }
 
     @Override
@@ -151,7 +154,7 @@ public class ProductoServiceImpl implements ProductoService {
         String codigoGenerado = String.format("PROD-%s-%s-%04d", prefijo, anioMes, cantidad);
 
         // Construir y guardar producto
-        Producto producto = construirProductoDesdeDto(productocrearDto, categoria , marca , codigoGenerado);
+        Producto producto = productoFactory.crearProducto(productocrearDto, categoria , marca , codigoGenerado);
         productoRepository.save(producto);
 
         // Subir imagenes asociadas al producto
@@ -178,13 +181,12 @@ public class ProductoServiceImpl implements ProductoService {
 
         Marca marca = marcaService.obtenerMarcaPorId(productoActualizarDto.getIdMarca());
 
-        // Actualiza  datos del producto
-        actualizarProductoDesdeDto(producto, productoActualizarDto, categoria, marca );
 
+        productoUpdater.actualizarProducto(producto, productoActualizarDto,categoria, marca);
         productoRepository.save(producto);
 
         // Convertir a DTO y retonar
-        return  convertirADto(producto);
+        return  obtenerProductoConImagenes(idProducto);
     }
 
     @Override
@@ -206,53 +208,6 @@ public class ProductoServiceImpl implements ProductoService {
 
     }
 
-    //=================================== Metodos auxiliares==============================
-
-
-    //Construir  Producto desde Dto
-    private Producto construirProductoDesdeDto(ProductoCrearDto productoDto, Categoria categoria, Marca marca, String codigoGenerado) {
-
-        Producto producto = new Producto();
-        producto.setCodigoProducto(codigoGenerado);
-        producto.setNombreProducto(productoDto.getNombreProducto());
-        producto.setDescripcion(productoDto.getDescripcion());
-        producto.setPrecio(productoDto.getPrecio());
-        producto.setStock(0);
-        producto.setFechaRegistro(productoDto.getFechaRegistro());
-        producto.setFechaActualizacion(productoDto.getFechaActualizacion());
-        producto.setCategoria(categoria);
-        producto.setMarca(marca);
-
-        return producto;
-    }
-
-    // Actualizar producto existente dese DTO
-    private void actualizarProductoDesdeDto(Producto producto, ProductoActualizarDto productoActualizarDto, Categoria categoria, Marca marca) {
-
-        if (productoActualizarDto.getNombreProducto() != null){
-            producto.setNombreProducto(productoActualizarDto.getNombreProducto());
-        }
-
-        if (productoActualizarDto.getDescripcion() != null){
-            producto.setDescripcion(productoActualizarDto.getDescripcion());
-        }
-
-        if (productoActualizarDto.getPrecio() != null){
-            producto.setPrecio(productoActualizarDto.getPrecio());
-        }
-
-        if (categoria != null){
-            producto.setCategoria(categoria);
-        }
-
-        if (marca != null){
-            producto.setMarca(marca);
-        }
-
-
-        // Actualizar fecha de modificación
-        producto.setFechaActualizacion(LocalDateTime.now());
-    }
 
     // Convertir entidad Producto a Dto
     private ProductoDto convertirADto(Producto producto) {
